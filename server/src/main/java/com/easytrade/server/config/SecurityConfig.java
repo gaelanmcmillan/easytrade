@@ -21,7 +21,7 @@ public class SecurityConfig {
         // TODO: What is CSRF
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("")
+                .requestMatchers("/api/v1/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
