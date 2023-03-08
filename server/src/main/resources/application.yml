@@ -14,5 +14,5 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 ---
 easytrade:
-  market: NASDAQ
+  exchange: NASDAQ
   symbols: AAPL, MSFT, GOOG, GOOGL, AMAZN, PCAR, BRK/A, BRK/B, NVDA, TSLA, META

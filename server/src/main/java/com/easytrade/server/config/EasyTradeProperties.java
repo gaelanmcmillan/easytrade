@@ -12,6 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @ConfigurationProperties(prefix="easytrade")
 public class EasyTradeProperties {
-    private String market;
-    private List<String> symbols;
+    private String exchange;
+    private String[] symbols;
 }
