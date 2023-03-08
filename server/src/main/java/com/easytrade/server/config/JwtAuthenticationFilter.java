@@ -1,5 +1,6 @@
 package com.easytrade.server.config;
 
+import com.easytrade.server.token.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
@@ -45,7 +47,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-        if (jwtService.isTokenValid(rawToken, userDetails)) {
+
+        // Token must be present, non-expired and non-revoked
+        boolean tokenIsRecognized = tokenRepository.findByToken(rawToken)
+                .map(token -> !token.isExpired() && !token.isRevoked())
+                .orElse(false);
+
+
+        if (jwtService.isTokenValid(rawToken, userDetails) && tokenIsRecognized) {
             var authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,
