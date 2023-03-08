@@ -1,4 +1,4 @@
-package com.easytrade.server.model;
+package com.easytrade.server.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
