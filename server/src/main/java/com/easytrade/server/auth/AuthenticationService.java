@@ -13,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -32,12 +34,15 @@ public class AuthenticationService {
                 .build();
 
         var newUser = userRepository.save(user);
-        var rawToken = jwtService.generateToken(user);
+        var res = jwtService.generateToken(user);
 
-        saveUserToken(newUser, rawToken);
+        saveUserToken(newUser, res.rawToken, res.expiration);
+
 
         return AuthenticationResponse.builder()
-                .token(rawToken)
+                .username(user.getUsername())
+                .token(res.rawToken)
+                .expiresAt(res.expiration)
                 .build();
     }
 
@@ -52,23 +57,26 @@ public class AuthenticationService {
 
         // TODO: Handle user doesn't exist?
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        var rawToken = jwtService.generateToken(user);
-
+        var res = jwtService.generateToken(user);
         revokeAllUserTokens(user);
-        saveUserToken(user, rawToken);
+
+        saveUserToken(user, res.rawToken, res.expiration);
 
         return AuthenticationResponse.builder()
-                .token(rawToken)
+                .username(user.getUsername())
+                .token(res.rawToken)
+                .expiresAt(res.expiration)
                 .build();
     }
 
-    private void saveUserToken(User user, String rawToken) {
+    private void saveUserToken(User user, String rawToken, Date expiration) {
         var token = Token.builder()
                 .user(user)
                 .token(rawToken)
                 .tokenType(TokenType.BEARER)
                 .expired(false)
                 .revoked(false)
+                .expiration(expiration)
                 .build();
 
         tokenRepository.save(token);

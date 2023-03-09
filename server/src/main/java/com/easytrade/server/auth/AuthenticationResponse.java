@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * An <code>AuthenticationResponse</code> provides a uniform wrapper for any object
  * we would like to send to a client on a successful authentication action (e.g. signup, login).
@@ -17,5 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationResponse {
+    private String username;
     private String token;
+    private Date expiresAt;
 }

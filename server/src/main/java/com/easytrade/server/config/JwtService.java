@@ -1,10 +1,14 @@
 package com.easytrade.server.config;
 
+import com.easytrade.server.token.Token;
+import com.easytrade.server.token.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +18,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+
 @Service
 public class JwtService {
+    public class JwtServiceResult {
+        public String rawToken;
+        public Date expiration;
+        public JwtServiceResult (String token, Date date) {
+            this.rawToken = token;
+            this.expiration = date;
+        }
+    }
     // TODO: Generate this secret key randomly ourselves... Not important right now!
     private static final String SECRET_KEY = "566D5970337336763979244226452948404D635166546A576E5A723474377721";
     String extractUsername(String token) {
@@ -27,19 +40,22 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken (UserDetails userDetails) {
+    public JwtServiceResult generateToken (UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public String generateToken (Map<String, Object> extraClaims, UserDetails userDetails) {
+    public JwtServiceResult generateToken (Map<String, Object> extraClaims, UserDetails userDetails) {
         int tokenLifetimeMillis = 1000 * 60 * 15; // 15 minutes
-        return Jwts.builder()
+
+        String rawToken = Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + tokenLifetimeMillis))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+
+        return new JwtServiceResult(rawToken, extractExpiration(rawToken));
     }
 
     /**
