@@ -8,6 +8,12 @@
   - `userData` is an object of the form: `{ email, password }`.
   - `responseHandler` is a function that will be supplied the JSON body of the response
 
+# REST-related Todos
+- [ ] Use or create some hooks to persist the `username, token, expiration` data that's returned from the `/api/v1/signup` and `api/v1/login` endpoints.
+- [ ] Create more `API` methods to map to our REST backend (buying, selling, querying stocks).
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
