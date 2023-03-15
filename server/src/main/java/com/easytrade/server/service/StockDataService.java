@@ -1,6 +1,7 @@
-package com.easytrade.server.stock;
+package com.easytrade.server.service;
 
 import com.easytrade.server.config.EasyTradeProperties;
+import com.easytrade.server.repository.StockDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Service;
  * */
 @Service
 @RequiredArgsConstructor
-public class StockPriceService {
+public class StockDataService {
     private final EasyTradeProperties easyTradeProperties;
-    private final StockPriceRepository stockPriceRepository;
+    private final StockDataRepository stockPriceRepository;
 
 
 

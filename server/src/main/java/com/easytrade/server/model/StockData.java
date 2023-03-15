@@ -1,4 +1,4 @@
-package com.easytrade.server.stock;
+package com.easytrade.server.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 
 @Data
@@ -16,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name="prices")
-public class StockPrice {
+public class StockData {
     @Id
     @GeneratedValue
     private Integer id;
@@ -28,8 +27,13 @@ public class StockPrice {
     @Column(name="date")
     private LocalDate date;
 
-    @Column(name="price")
-    private BigInteger price;
+    private BigDecimal ask;
+    private BigDecimal bid;
+    private BigDecimal price;
+    private BigDecimal previousClose;
+    private BigDecimal earningsPerShare;
+    private BigDecimal priceToEarningsRatio;
+
 
     @Enumerated(EnumType.STRING)
     private PriceType priceType;

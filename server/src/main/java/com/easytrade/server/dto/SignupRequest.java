@@ -1,4 +1,4 @@
-package com.easytrade.server.auth;
+package com.easytrade.server.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 public class SignupRequest {
     private String firstName;
     private String lastName;
-    private String email;
+    private String username;
     private String password;
 }

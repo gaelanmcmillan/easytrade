@@ -1,6 +1,7 @@
 package com.easytrade.server.config;
 
-import com.easytrade.server.token.TokenRepository;
+import com.easytrade.server.repository.TokenRepository;
+import com.easytrade.server.service.JsonWebTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,8 +21,8 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtService jwtService;
+public class JsonWebTokenAuthenticationFilter extends OncePerRequestFilter {
+    private final JsonWebTokenService jwtService;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
 
@@ -37,8 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        final String rawToken = maybeToken.get();
-        final String username = jwtService.extractUsername(rawToken);
+        final String tokenLiteral = maybeToken.get();
+        final String username = jwtService.extractUsername(tokenLiteral);
 
         // If the username is invalid or the user is already authenticated, we can return early.
         if (username == null || SecurityContextHolder.getContext().getAuthentication() != null) {
@@ -49,12 +50,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
         // Token must be present, non-expired and non-revoked
-        boolean tokenIsRecognized = tokenRepository.findByToken(rawToken)
+        boolean tokenIsRecognized = tokenRepository.findByLiteral(tokenLiteral)
                 .map(token -> !token.isExpired() && !token.isRevoked())
                 .orElse(false);
 
 
-        if (jwtService.isTokenValid(rawToken, userDetails) && tokenIsRecognized) {
+        if (jwtService.isTokenValid(tokenLiteral, userDetails) && tokenIsRecognized) {
             var authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,

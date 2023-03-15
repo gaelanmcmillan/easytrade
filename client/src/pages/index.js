@@ -3,6 +3,7 @@ import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
 
 import API from '@/lib/api'
+import JWT from '@/lib/jwt'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,11 +15,11 @@ function Signup() {
 		const userData = {
 			firstName: e.target.firstname.value,
 			lastName: e.target.lastname.value,
-			email: e.target.email.value,
+			username: e.target.username.value,
 			password: e.target.password.value,
 		};
 
-		API.signup(userData, data => console.log(data));
+		API.signup(userData, data => console.log(JWT.extractPayload(data.token)));
 	};
 
 	return (
@@ -33,8 +34,8 @@ function Signup() {
 					<input name="lastname" placeholder="Smith" />
 				</div>
 				<div>
-					<label for="email">Email</label>
-					<input name="email" placeholder="john@smith.com" />
+					<label for="username">Username</label>
+					<input name="username" placeholder="username" />
 				</div>
 				<div>
 					<label for="password">Password</label>
@@ -53,7 +54,7 @@ function Login() {
 		e.preventDefault();
 
 		const userData = {
-			email: e.target.email.value,
+			username: e.target.email.value,
 			password: e.target.password.value,
 		};
 
@@ -64,7 +65,7 @@ function Login() {
 		<div className={styles.homeform}>
 			<form onSubmit={handleLogin}>
 				<div>
-					<input name="email" placeholder="john@smith.com" />
+					<input name="username" placeholder="username" />
 				</div>
 				<div>
 					<input type="password" name="password" placeholder="" />

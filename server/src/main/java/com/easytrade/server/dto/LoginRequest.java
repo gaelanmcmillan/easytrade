@@ -1,4 +1,4 @@
-package com.easytrade.server.auth;
+package com.easytrade.server.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginRequest {
-    private String email;
+    private String username;
     String password;
 }
