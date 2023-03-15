@@ -25,9 +25,9 @@ public class LogoutService implements LogoutHandler {
             return;
         }
 
-        final String rawToken = maybeToken.get();
+        final String tokenLiteral = maybeToken.get();
 
-        tokenRepository.findByToken(rawToken).ifPresent(token -> {
+        tokenRepository.findByLiteral(tokenLiteral).ifPresent(token -> {
             token.setExpired(true);
             token.setRevoked(true);
             tokenRepository.save(token);

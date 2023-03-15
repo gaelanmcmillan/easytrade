@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
  * */
 @Service
 @RequiredArgsConstructor
-public class StockPriceService {
+public class StockDataService {
     private final EasyTradeProperties easyTradeProperties;
-    private final StockPriceRepository stockPriceRepository;
+    private final StockDataRepository stockPriceRepository;
 
 
 

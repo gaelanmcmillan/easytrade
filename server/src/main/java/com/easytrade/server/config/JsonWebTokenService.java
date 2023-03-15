@@ -1,14 +1,10 @@
 package com.easytrade.server.config;
 
-import com.easytrade.server.token.Token;
-import com.easytrade.server.token.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +16,12 @@ import java.util.function.Function;
 
 
 @Service
-public class JwtService {
-    public class JwtServiceResult {
-        public String rawToken;
+public class JsonWebTokenService {
+    public class TokenAndExpiry {
+        public String tokenLiteral;
         public Date expiration;
-        public JwtServiceResult (String token, Date date) {
-            this.rawToken = token;
+        public TokenAndExpiry(String token, Date date) {
+            this.tokenLiteral = token;
             this.expiration = date;
         }
     }
@@ -40,11 +36,11 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public JwtServiceResult generateToken (UserDetails userDetails) {
+    public TokenAndExpiry generateToken (UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public JwtServiceResult generateToken (Map<String, Object> extraClaims, UserDetails userDetails) {
+    public TokenAndExpiry generateToken (Map<String, Object> extraClaims, UserDetails userDetails) {
         int tokenLifetimeMillis = 1000 * 60 * 15; // 15 minutes
 
         String rawToken = Jwts.builder()
@@ -55,30 +51,30 @@ public class JwtService {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
 
-        return new JwtServiceResult(rawToken, extractExpiration(rawToken));
+        return new TokenAndExpiry(rawToken, extractExpiration(rawToken));
     }
 
     /**
      * A user's token is valid if it matches the user and the token is not expired.
      * */
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean isTokenValid(String tokenLiteral, UserDetails userDetails) {
+        final String username = extractUsername(tokenLiteral);
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(tokenLiteral);
     }
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    private boolean isTokenExpired(String tokenLiteral) {
+        return extractExpiration(tokenLiteral).before(new Date());
     }
 
-    private Date extractExpiration (String token) {
-        return extractClaim(token, Claims::getExpiration);
+    private Date extractExpiration (String tokenLiteral) {
+        return extractClaim(tokenLiteral, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String tokenLiteral) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(tokenLiteral)
                 .getBody();
     }
 

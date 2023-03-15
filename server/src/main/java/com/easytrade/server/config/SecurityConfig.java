@@ -16,12 +16,11 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JsonWebTokenAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider jwtAuthenticationProvider;
     private final LogoutHandler logoutHandler;
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
-        // TODO: What is CSRF
         http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**")

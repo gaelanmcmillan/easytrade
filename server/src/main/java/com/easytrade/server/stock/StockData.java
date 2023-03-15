@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name="prices")
-public class StockPrice {
+public class StockData {
     @Id
     @GeneratedValue
     private Integer id;
@@ -28,8 +28,13 @@ public class StockPrice {
     @Column(name="date")
     private LocalDate date;
 
-    @Column(name="price")
-    private BigInteger price;
+    private BigDecimal ask;
+    private BigDecimal bid;
+    private BigDecimal price;
+    private BigDecimal previousClose;
+    private BigDecimal earningsPerShare;
+    private BigDecimal priceToEarningsRatio;
+
 
     @Enumerated(EnumType.STRING)
     private PriceType priceType;

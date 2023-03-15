@@ -1,6 +1,6 @@
 package com.easytrade.server.stock;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface StockRepository extends JpaRepository<Stock, String> {
+public interface StockRepository extends CrudRepository<Stock, String> {
 }

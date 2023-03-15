@@ -1,6 +1,6 @@
 package com.easytrade.server.auth;
 
-import com.easytrade.server.config.JwtService;
+import com.easytrade.server.config.JsonWebTokenService;
 import com.easytrade.server.token.Token;
 import com.easytrade.server.token.TokenRepository;
 import com.easytrade.server.token.TokenType;
@@ -21,7 +21,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JsonWebTokenService jwtService;
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse signup(SignupRequest request) {
@@ -36,12 +36,11 @@ public class AuthenticationService {
         var newUser = userRepository.save(user);
         var res = jwtService.generateToken(user);
 
-        saveUserToken(newUser, res.rawToken, res.expiration);
-
+        saveUserToken(newUser, res.tokenLiteral, res.expiration);
 
         return AuthenticationResponse.builder()
                 .username(user.getUsername())
-                .token(res.rawToken)
+                .token(res.tokenLiteral)
                 .expiresAt(res.expiration)
                 .build();
     }
@@ -60,19 +59,19 @@ public class AuthenticationService {
         var res = jwtService.generateToken(user);
         revokeAllUserTokens(user);
 
-        saveUserToken(user, res.rawToken, res.expiration);
+        saveUserToken(user, res.tokenLiteral, res.expiration);
 
         return AuthenticationResponse.builder()
                 .username(user.getUsername())
-                .token(res.rawToken)
+                .token(res.tokenLiteral)
                 .expiresAt(res.expiration)
                 .build();
     }
 
-    private void saveUserToken(User user, String rawToken, Date expiration) {
+    private void saveUserToken(User user, String tokenLiteral, Date expiration) {
         var token = Token.builder()
                 .user(user)
-                .token(rawToken)
+                .literal(tokenLiteral)
                 .tokenType(TokenType.BEARER)
                 .expired(false)
                 .revoked(false)
