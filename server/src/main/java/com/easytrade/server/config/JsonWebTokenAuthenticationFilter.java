@@ -1,6 +1,7 @@
 package com.easytrade.server.config;
 
-import com.easytrade.server.token.TokenRepository;
+import com.easytrade.server.repository.TokenRepository;
+import com.easytrade.server.service.JsonWebTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

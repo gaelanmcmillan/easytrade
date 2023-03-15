@@ -1,10 +1,7 @@
-package com.easytrade.server.token;
+package com.easytrade.server.model;
 
-import com.easytrade.server.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Date;
 
 @Data
 @Entity
@@ -24,8 +21,6 @@ public class Token {
 
     public boolean revoked;
     public boolean expired;
-
-    public Date expiration;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

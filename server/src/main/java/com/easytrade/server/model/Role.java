@@ -1,4 +1,4 @@
-package com.easytrade.server.user;
+package com.easytrade.server.model;
 
 public enum Role {
     USER,

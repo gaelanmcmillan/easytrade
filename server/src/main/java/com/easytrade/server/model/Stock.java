@@ -1,4 +1,4 @@
-package com.easytrade.server.stock;
+package com.easytrade.server.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

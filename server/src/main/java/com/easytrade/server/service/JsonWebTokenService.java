@@ -1,4 +1,4 @@
-package com.easytrade.server.config;
+package com.easytrade.server.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,17 +17,9 @@ import java.util.function.Function;
 
 @Service
 public class JsonWebTokenService {
-    public class TokenAndExpiry {
-        public String tokenLiteral;
-        public Date expiration;
-        public TokenAndExpiry(String token, Date date) {
-            this.tokenLiteral = token;
-            this.expiration = date;
-        }
-    }
     // TODO: Generate this secret key randomly ourselves... Not important right now!
     private static final String SECRET_KEY = "566D5970337336763979244226452948404D635166546A576E5A723474377721";
-    String extractUsername(String token) {
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -36,22 +28,20 @@ public class JsonWebTokenService {
         return claimsResolver.apply(claims);
     }
 
-    public TokenAndExpiry generateToken (UserDetails userDetails) {
+    public String generateToken (UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public TokenAndExpiry generateToken (Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String generateToken (Map<String, Object> extraClaims, UserDetails userDetails) {
         int tokenLifetimeMillis = 1000 * 60 * 15; // 15 minutes
 
-        String rawToken = Jwts.builder()
+        return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + tokenLifetimeMillis))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
-
-        return new TokenAndExpiry(rawToken, extractExpiration(rawToken));
     }
 
     /**

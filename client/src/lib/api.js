@@ -3,7 +3,6 @@ const hostname = "http://localhost:8080"
 const apiPrefix = hostname + "/api/v1"
 
 function corsRequest (method, userData) {
-  console.log(userData);
   return {
     method: method,
     mode: "cors",

@@ -1,8 +1,9 @@
-package com.easytrade.server.auth;
+package com.easytrade.server.controller;
 
+import com.easytrade.server.dto.LoginRequest;
+import com.easytrade.server.dto.SignupRequest;
+import com.easytrade.server.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

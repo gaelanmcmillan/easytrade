@@ -1,10 +1,10 @@
-package com.easytrade.server.stock;
+package com.easytrade.server.repository;
 
+import com.easytrade.server.model.StockData;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 

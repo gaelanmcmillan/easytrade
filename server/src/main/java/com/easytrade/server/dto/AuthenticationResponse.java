@@ -1,4 +1,4 @@
-package com.easytrade.server.auth;
+package com.easytrade.server.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,5 +21,4 @@ import java.util.Date;
 public class AuthenticationResponse {
     private String username;
     private String token;
-    private Date expiresAt;
 }

@@ -1,7 +1,5 @@
-package com.easytrade.server.portfolio;
+package com.easytrade.server.model;
 
-import com.easytrade.server.stock.Stock;
-import com.easytrade.server.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

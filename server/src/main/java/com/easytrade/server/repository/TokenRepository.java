@@ -1,9 +1,9 @@
-package com.easytrade.server.token;
+package com.easytrade.server.repository;
 
+import com.easytrade.server.model.Token;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
