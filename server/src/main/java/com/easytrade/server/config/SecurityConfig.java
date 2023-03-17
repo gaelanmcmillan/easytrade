@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 public class SecurityConfig {
     private final JsonWebTokenAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider jwtAuthenticationProvider;
-    private final LogoutHandler logoutHandler;
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -32,11 +31,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(jwtAuthenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout()
-                .logoutUrl("/api/v1/auth/logout")
-                .addLogoutHandler(logoutHandler)
-                .logoutSuccessHandler((req,res,auth) -> SecurityContextHolder.clearContext());
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

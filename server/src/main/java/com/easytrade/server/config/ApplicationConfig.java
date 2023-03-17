@@ -25,7 +25,6 @@ import java.util.Optional;
 @EnableConfigurationProperties(EasyTradeProperties.class)
 public class ApplicationConfig {
     private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByUsername(username)
@@ -49,25 +48,5 @@ public class ApplicationConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public LogoutHandler logoutHandler() {
-        return (request, response, authentication) -> {
-            final Optional<String> maybeToken = RequestParser.extractBearerToken(request);
-            // We can return early if no token was extracted.
-            if (maybeToken.isEmpty()) {
-                return;
-            }
-
-            final String tokenLiteral = maybeToken.get();
-
-            tokenRepository.findByLiteral(tokenLiteral).ifPresent(token -> {
-                token.setExpired(true);
-                token.setRevoked(true);
-                tokenRepository.save(token);
-                SecurityContextHolder.clearContext();
-            });
-        };
     }
 }
