@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
+import useToken from './useToken.js';
+
 
 function App() {
-  const [ token, setToken] = useState();
+  const {token, setToken}= useToken;
   if (!token) {
       return (
           <div className="wrapper">
