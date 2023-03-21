@@ -3,12 +3,14 @@ package com.easytrade.server.service;
 import com.easytrade.server.dto.LoginRequest;
 import com.easytrade.server.dto.SignupRequest;
 import com.easytrade.server.dto.AuthenticationResponse;
+import com.easytrade.server.exception.AccountWithUsernameExistsException;
 import com.easytrade.server.model.Role;
 import com.easytrade.server.model.User;
 import com.easytrade.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +27,7 @@ public class AuthenticationService {
      * NOTE: This method could fail if the user already exists in the database.
      * */
     @Transactional
-    public AuthenticationResponse signup(SignupRequest request) {
+    public AuthenticationResponse signup(SignupRequest request) throws AccountWithUsernameExistsException {
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -34,6 +36,10 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
 
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            String message = "An account with username '" + user.getUsername() + "' already exists.";
+            throw new AccountWithUsernameExistsException(message);
+        }
         // TODO: Handle username already exists
         userRepository.save(user);
         var tokenLiteral = jwtService.generateToken(user);
