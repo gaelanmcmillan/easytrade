@@ -30,7 +30,7 @@ public class JsonWebTokenAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final Optional<String> maybeToken = RequestParser.extractBearerToken(request);
+        final Optional<String> maybeToken = extractBearerToken(request);
         // We can return early if no token was extracted.
         if (maybeToken.isEmpty()) {
             filterChain.doFilter(request, response);
@@ -59,5 +59,16 @@ public class JsonWebTokenAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private Optional<String> extractBearerToken(HttpServletRequest request) {
+        final String BEARER_PREFIX = "Bearer ";
+        final String header = request.getHeader("Authorization");
+
+        if (header == null || !header.startsWith(BEARER_PREFIX)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(header.substring(BEARER_PREFIX.length()));
     }
 }
