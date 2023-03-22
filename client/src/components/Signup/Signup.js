@@ -54,7 +54,10 @@ export default function Signup({ setToken }) {
 			password: e.target.password.value,
 		};
 
-		signup(userData, data => setToken(extractPayload(data.token)));
+        // This line will store the decoded token
+		//signup(userData, data => setToken(extractPayload(data.token)));
+        // This line will store the raw token
+		signup(userData, data => setToken(data.token));
 	};
 
 	return (

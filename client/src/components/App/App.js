@@ -3,11 +3,11 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
-import useToken from './useToken.js';
+import useToken from './useToken';
 
 
 function App() {
-  const {token, setToken}= useToken;
+  const {token, setToken}= useToken();
   if (!token) {
       return (
           <div className="wrapper">
@@ -22,7 +22,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/login' element={<Login/>}/ >
-          <Route path='/signup' element={<Signup/>}/ >
         </Routes>
       </BrowserRouter>
       <h2>WELCOME HOME</h2>
