@@ -40,7 +40,7 @@ public class AuthenticationService {
             String message = "An account with username '" + user.getUsername() + "' already exists.";
             throw new AccountWithUsernameExistsException(message);
         }
-        // TODO: Handle username already exists
+
         userRepository.save(user);
         var tokenLiteral = jwtService.generateToken(user);
 

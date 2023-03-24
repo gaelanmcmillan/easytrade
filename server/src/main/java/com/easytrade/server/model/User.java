@@ -1,5 +1,6 @@
 package com.easytrade.server.model;
 
+import com.easytrade.server.exception.InsufficientFundsException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "easytrade_user")
-public class User implements UserDetails {
+public class User implements UserDetails, Purchaser {
     @Id
     @GeneratedValue
     private Integer id;
@@ -28,6 +30,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
 
+    private BigDecimal accountBalance;
     @Enumerated(EnumType.STRING)
     private Role role; // Represents the authorities a user has.
 
@@ -64,5 +67,13 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public void makePurchase(BigDecimal amount) throws InsufficientFundsException {
+        if (getAccountBalance().compareTo(amount) < 0) {
+            throw new InsufficientFundsException("Insufficient funds.");
+        }
+        setAccountBalance(getAccountBalance().subtract(amount));
     }
 }
