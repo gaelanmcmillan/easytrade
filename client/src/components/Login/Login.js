@@ -1,22 +1,24 @@
 import React from 'react';
 import './Login.css';
 
-export default function Login() {
-    const handleLogin = e => {
+class Login extends React.Component {
+    handleLogin = e => {
         e.preventDefault();
 
         const userData = {
-            username: e.target.email.value,
+            username: e.target.username.value,
             password: e.target.password.value,
         };
 
-        //API.login(userData, data => console.log("Logged in " + JSON.stringify(data)));
+        //API.login(userData, data => JSON.stringify(data));
         console.log("Logged in " + JSON.stringify(userData));
     }
 
+    render () {
     return (
         <div className='homeform'>
-            <form onSubmit={handleLogin}>
+        <p>####Login####</p>
+            <form onSubmit={this.handleLogin}>
                 <div>
                     <input name="username" placeholder="username" />
                 </div>
@@ -30,3 +32,6 @@ export default function Login() {
         </div>
     );
 }
+}
+
+export default Login;
