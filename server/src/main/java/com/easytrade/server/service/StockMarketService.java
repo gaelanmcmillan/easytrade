@@ -26,10 +26,7 @@ public class StockMarketService {
     private final StockRepository stockRepository;
     private final StockDataRepository stockDataRepository;
     private final StockDataService stockDataService;
-
     private final JsonWebTokenService jwtService;
-
-
 
     public BuyStockResponse buyStock(String bearerToken, BuyStockRequest request)
             throws  NonexistentUserException,
