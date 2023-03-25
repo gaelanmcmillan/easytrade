@@ -1,10 +1,13 @@
 package com.easytrade.server.service;
 
+import com.easytrade.server.model.User;
+import com.easytrade.server.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +15,12 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 
 @Service
+@RequiredArgsConstructor
 public class JsonWebTokenService {
     // TODO: Generate this secret key randomly ourselves... Not important right now!
     private static final String SECRET_KEY = "566D5970337336763979244226452948404D635166546A576E5A723474377721";
@@ -52,7 +57,7 @@ public class JsonWebTokenService {
         return username.equals(userDetails.getUsername()) && !isTokenExpired(tokenLiteral);
     }
 
-    private boolean isTokenExpired(String tokenLiteral) {
+    public boolean isTokenExpired(String tokenLiteral) {
         return extractExpiration(tokenLiteral).before(new Date());
     }
 

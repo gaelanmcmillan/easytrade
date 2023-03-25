@@ -1,6 +1,5 @@
 package com.easytrade.server.config;
 
-import com.easytrade.server.repository.TokenRepository;
 import com.easytrade.server.service.JsonWebTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,7 +23,6 @@ import java.util.Optional;
 public class JsonWebTokenAuthenticationFilter extends OncePerRequestFilter {
     private final JsonWebTokenService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
@@ -32,7 +30,7 @@ public class JsonWebTokenAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final Optional<String> maybeToken = RequestParser.extractBearerToken(request);
+        final Optional<String> maybeToken = extractBearerToken(request);
         // We can return early if no token was extracted.
         if (maybeToken.isEmpty()) {
             filterChain.doFilter(request, response);
@@ -49,13 +47,7 @@ public class JsonWebTokenAuthenticationFilter extends OncePerRequestFilter {
 
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-        // Token must be present, non-expired and non-revoked
-        boolean tokenIsRecognized = tokenRepository.findByLiteral(tokenLiteral)
-                .map(token -> !token.isExpired() && !token.isRevoked())
-                .orElse(false);
-
-
-        if (jwtService.isTokenValid(tokenLiteral, userDetails) && tokenIsRecognized) {
+        if (jwtService.isTokenValid(tokenLiteral, userDetails)) {
             var authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,
@@ -67,5 +59,16 @@ public class JsonWebTokenAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private Optional<String> extractBearerToken(HttpServletRequest request) {
+        final String BEARER_PREFIX = "Bearer ";
+        final String header = request.getHeader("Authorization");
+
+        if (header == null || !header.startsWith(BEARER_PREFIX)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(header.substring(BEARER_PREFIX.length()));
     }
 }
