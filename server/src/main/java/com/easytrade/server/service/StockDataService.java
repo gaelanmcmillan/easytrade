@@ -26,7 +26,6 @@ public class StockDataService {
 
     private void updateAllStocks() {
         var stockSymbols = easyTradeProperties.getSymbols();
-
     }
     private Boolean shouldUpdateStock(Stock stock) {
         return true;

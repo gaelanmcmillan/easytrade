@@ -21,6 +21,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     @PostMapping("/signup")
     public ResponseEntity<?> signup (@RequestBody SignupRequest request) {
+        // ResponseEntity.ok() === HTTP 200
         try {
             return ResponseEntity.ok(authenticationService.signup(request));
         } catch (AccountWithUsernameExistsException e) {

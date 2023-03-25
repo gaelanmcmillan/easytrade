@@ -1,12 +1,16 @@
 package com.easytrade.server.service;
 
 import com.easytrade.server.dto.BuyStockRequest;
+import com.easytrade.server.dto.BuyStockResponse;
 import com.easytrade.server.exception.InsufficientFundsException;
+import com.easytrade.server.exception.InvalidQuantityException;
+import com.easytrade.server.exception.NonexistentUserException;
 import com.easytrade.server.exception.UnknownTickerSymbolException;
 import com.easytrade.server.model.User;
 import com.easytrade.server.repository.StockDataRepository;
 import com.easytrade.server.repository.StockRepository;
 import com.easytrade.server.repository.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,47 +29,43 @@ public class StockMarketService {
 
     private final JsonWebTokenService jwtService;
 
-    public ResponseEntity<?> buyStock(String bearerToken, BuyStockRequest request) {
+
+
+    public BuyStockResponse buyStock(String bearerToken, BuyStockRequest request)
+            throws  NonexistentUserException,
+                    InvalidQuantityException,
+                    UnknownTickerSymbolException,
+                    InsufficientFundsException
+    {
         String tokenLiteral = bearerToken.substring("Bearer ".length());
         String username = jwtService.extractUsername(tokenLiteral);
 
-        // Error case: Token is expired
-        if (jwtService.isTokenExpired(tokenLiteral)) {
-            return ResponseEntity.badRequest().body("Token is expired...");
-        }
+        // Error case: Token is expired (I think this will fail before reaching us)
+//        if (jwtService.isTokenExpired(tokenLiteral)) {
+//            // Using regular exception because I'm not sure this check is necessary
+//            throw new Exception("Token is expired");
+//        }
 
         // Error case: User doesn't exist
-        Optional<User> maybeUser = userRepository.findByUsername(username);
-
-        if (maybeUser.isEmpty()) {
-            return ResponseEntity.badRequest().body("Bad credentials...");
-        }
-        User user = maybeUser.get();
-
+        User user = userRepository.findByUsername(username)
+                                  .orElseThrow(() -> new NonexistentUserException(
+                                          String.format("User with username '%s' doesn't exist", username)));
 
         // Error case: Quantity is invalid
         int quantity = request.getQuantity();
         if (quantity < 0) {
-            return ResponseEntity.badRequest().body("Invalid quantity. Must be a positive integer.");
+            throw new InvalidQuantityException(
+                    String.format(
+                            "Quantity '%d' is not valid. Quantity should be a positive integer.", quantity));
         }
 
         // Error case: Ticker symbol doesn't exist
         String tickerSymbol = request.getSymbol();
+        BigDecimal price = stockDataService.getLatestPrice(tickerSymbol);
 
-        BigDecimal price;
-        try {
-            price = stockDataService.getLatestPrice(tickerSymbol);
-        } catch (UnknownTickerSymbolException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        // Error case: Insufficient funds (throws InsufficientFundsError)
+        user.makePurchase(price.multiply(BigDecimal.valueOf(quantity)));
 
-        // Error case: Insufficient funds
-        try {
-            user.makePurchase(price.multiply(BigDecimal.valueOf(quantity)));
-        } catch (InsufficientFundsException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
-        return ResponseEntity.ok(username);
+        return BuyStockResponse.builder().message("Success").build();
     }
 }

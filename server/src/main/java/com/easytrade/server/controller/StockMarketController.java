@@ -1,7 +1,10 @@
 package com.easytrade.server.controller;
 
 import com.easytrade.server.dto.BuyStockRequest;
+import com.easytrade.server.dto.BuyStockResponse;
 import com.easytrade.server.exception.InsufficientFundsException;
+import com.easytrade.server.exception.InvalidQuantityException;
+import com.easytrade.server.exception.NonexistentUserException;
 import com.easytrade.server.exception.UnknownTickerSymbolException;
 import com.easytrade.server.model.User;
 import com.easytrade.server.repository.UserRepository;
@@ -48,8 +51,13 @@ public class StockMarketController {
     public ResponseEntity<?> buyStock(
             @RequestHeader (HttpHeaders.AUTHORIZATION) String bearerToken,
             @RequestBody BuyStockRequest request) {
-        System.out.println("Buy request with " + bearerToken);
-        return stockMarketService.buyStock(bearerToken, request);
+        try {
+            stockMarketService.buyStock(bearerToken, request);
+        } catch (NonexistentUserException | InvalidQuantityException | UnknownTickerSymbolException |
+                 InsufficientFundsException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.noContent().build();
     }
 
     /**
