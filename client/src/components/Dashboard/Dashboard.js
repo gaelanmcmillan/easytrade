@@ -6,7 +6,13 @@ function request (data) {
   console.log(data.token+"TOKEN");
   return {
     method: "GET",
-    headers: { "Authorization": "Bearer "+data.token, "Accept":"application/json" }
+    mode: "cors",
+    headers: { "Authorization":
+                    "Bearer "+data.token,
+                "Access-Control-Allow-Origin":
+                    "http://localhost:8080",
+                "Accept":
+                    "application/json" }
   }
 }
 /**
@@ -16,7 +22,8 @@ function request (data) {
  * @param {*} responseHandler A callback function to use with the response. Cache username, token, expiry.
  */
 const demo = async (demoData, responseHandler) => {
-  const endpoint = apiPrefix + "/auth/demo";
+  const endpoint = apiPrefix + "/demo";
+  console.log(endpoint);
   fetch(endpoint, request(demoData))
     .then(res => res.json())
     .then(data => responseHandler(data));
