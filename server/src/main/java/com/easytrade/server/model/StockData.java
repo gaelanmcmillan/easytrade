@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Stores a slice of time-series data regarding the historical price of a stock
+ * */
 @Data
 @Builder
 @NoArgsConstructor

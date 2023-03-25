@@ -5,7 +5,7 @@ spring:
     password: easypassword
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
@@ -16,3 +16,4 @@ spring:
 easytrade:
   exchange: NASDAQ
   symbols: AAPL, MSFT, GOOG, GOOGL, AMAZN, PCAR, BRK/A, BRK/B, NVDA, TSLA, META
+  starting-balance: 100_000.0
