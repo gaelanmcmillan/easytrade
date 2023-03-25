@@ -14,14 +14,17 @@ class App extends React.Component {
             token: userToken
         }));
         sessionStorage.setItem('token', JSON.stringify(userToken));
+        console.log(userToken)
     };
 
     getToken = () => {
-        return this.state.token
+        const tokenString = sessionStorage.getItem('token');
+        const userToken = JSON.parse(tokenString);
+        return userToken;
     }
 
     render() {
-      if (!this.state.token) {
+      if (!this.getToken()) {
           return (
               <div className="wrapper">
               <h1>EasyTrade</h1>
@@ -36,7 +39,7 @@ class App extends React.Component {
               </p>
               <BrowserRouter>
                 <Routes>
-                  <Route path='/login' element={<Login/>}/ >
+                  <Route path='/login' element={<Login setToken={this.setToken}/>}/ >
                   <Route path='/signup' element={<Signup setToken={this.setToken}/>}/ >
                 </Routes>
               </BrowserRouter>
