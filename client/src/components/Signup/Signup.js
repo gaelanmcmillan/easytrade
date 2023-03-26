@@ -1,47 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import API from '../lib/API'
 
-import './Signup.css';
-
-const hostname = "http://localhost:8080"
-const apiPrefix = hostname + "/api/v1"
-
-/**
- * Returns the payload object as extracted from the given token literal.
- * @param {*} tokenLiteral
- * @returns
- */
-const extractPayload = (tokenLiteral) => {
-  // JWT is of the form `header.payload.signature`
-  const base64Payload = tokenLiteral.split('.')[1];
-  console.log(`Base64 Payload: ${base64Payload}`)
-  const jsonStringPayload = decodeURIComponent(window.atob(base64Payload))
-  console.log(`As JSON String: ${jsonStringPayload}`)
-
-  return JSON.parse(jsonStringPayload);
-}
-
-function corsRequest (method, userData) {
-  return {
-    method: method,
-    mode: "cors",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(userData)
-  }
-}
-
-/**
- * Send a request to the backend to sign the user up.
- *
- * @param {*} userData { firstName, lastName, email, password }
- * @param {*} responseHandler A callback function to use with the response. Cache username, token, expiry.
- */
-const signup = async (userData, responseHandler) => {
-  const endpoint = apiPrefix + "/auth/signup";
-  fetch(endpoint, corsRequest("POST", userData))
-    .then(res => res.json())
-    .then(data => responseHandler(data));
-}
+import '../../index.css';
 
 class Signup extends React.Component {
     constructor ( setToken ) {
@@ -61,13 +22,13 @@ class Signup extends React.Component {
         // This line will store the decoded token
         //signup(userData, data => setToken(extractPayload(data.token)));
         // This line will store the raw token
-        signup(userData, data => this.setToken.setToken(data.token));
+        API.signup(userData, data => this.setToken.setToken(data.token));
     }
     render(){
         return (
-            <div className='homeform'>
-                <p>####Signup####</p>
-                <form onSubmit={this.handleSignup}>
+            <div className='container'>
+                <form onSubmit={this.handleSignup} class="card width-50 center">
+                  <h1 class="center-text">Sign Up</h1>
                 <div>
                     <label for="firstname">First Name</label>
                     <input name="firstname" placeholder="John" />
@@ -85,7 +46,7 @@ class Signup extends React.Component {
                     <input type="password" name="password" placeholder="" />
                 </div>
                 <div>
-                    <button type="submit">Sign Up</button>
+                  <button class="button" type="submit">Sign up</button>
                 </div>
                 </form>
             </div>
