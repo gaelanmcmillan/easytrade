@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 
 /**
@@ -28,16 +29,14 @@ public class StockData {
     private Stock stock;
 
     @Column(name="date")
-    private LocalDate date;
-
+    private Date date;
     private BigDecimal ask;
     private BigDecimal bid;
+    private BigDecimal open;
+    private BigDecimal close;
     private BigDecimal price;
-    private BigDecimal previousClose;
-    private BigDecimal earningsPerShare;
-    private BigDecimal priceToEarningsRatio;
 
 
-    @Enumerated(EnumType.STRING)
-    private PriceType priceType;
+//    private BigDecimal earningsPerShare;
+//    private BigDecimal priceToEarningsRatio;
 }
