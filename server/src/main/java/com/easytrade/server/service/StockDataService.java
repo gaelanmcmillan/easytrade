@@ -38,7 +38,7 @@ public class StockDataService {
 
     public BigDecimal getLatestPrice(String tickerSymbol) throws UnknownTickerSymbolException {
         Stock stock = stockRepository.getStockBySymbol(tickerSymbol).orElseThrow(
-                () -> new UnknownTickerSymbolException("No stock with symbol '" + tickerSymbol + "' could be found."));
+                () -> new UnknownTickerSymbolException(tickerSymbol));
         StockData data;
         if (shouldUpdateStock(stock)) {
             data = updateStockDataFor(stock);
