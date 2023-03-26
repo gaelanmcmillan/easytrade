@@ -19,15 +19,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name="prices")
+@IdClass(StockDataId.class)
 public class StockData {
     @Id
-    @GeneratedValue
-    private Integer id;
-
     @ManyToOne
-    @JoinColumn(name="stock_id")
+    @JoinColumn(name="ticker_symbol")
     private Stock stock;
 
+    @Id
     @Column(name="date")
     private Date date;
     private BigDecimal ask;
@@ -35,6 +34,7 @@ public class StockData {
     private BigDecimal open;
     private BigDecimal close;
     private BigDecimal price;
+    private Long volume;
 
 
 //    private BigDecimal earningsPerShare;

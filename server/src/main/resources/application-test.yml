@@ -15,5 +15,5 @@ spring:
 ---
 easytrade:
   exchange: NASDAQ
-  symbols: AAPL, MSFT, GOOG, GOOGL, AMAZN, PCAR, BRK/A, BRK/B, NVDA, TSLA, META
+  symbols: AAPL, MSFT, GOOG, GOOGL, PCAR, NVDA, TSLA, META
   starting-balance: 100_000.0
