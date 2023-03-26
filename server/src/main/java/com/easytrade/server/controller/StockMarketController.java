@@ -97,7 +97,10 @@ public class StockMarketController {
     }
 
 
-
-
+    @GetMapping("/all")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getAllStocks() {
+        return ResponseEntity.ok(stockMarketService.getAllStocks());
+    }
     // get info {id}
 }
