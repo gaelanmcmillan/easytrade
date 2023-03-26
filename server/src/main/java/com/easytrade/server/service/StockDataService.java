@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -39,13 +40,14 @@ public class StockDataService {
     public BigDecimal getLatestPrice(String tickerSymbol) throws UnknownTickerSymbolException {
         Stock stock = stockRepository.getStockBySymbol(tickerSymbol).orElseThrow(
                 () -> new UnknownTickerSymbolException(tickerSymbol));
-        StockData data;
-        if (shouldUpdateStock(stock)) {
-            data = updateStockDataFor(stock);
-        } else {
-            data = stockDataRepository.getPriceBySymbolAndDate(tickerSymbol, LocalDate.now()).get();
-        }
 
-        return data.getPrice();
+        return stock.getCurrentOpen();
+    }
+
+    /**
+     *
+     * */
+    private void retrieveStockDataInterval(Date from, Date to) {
+
     }
 }

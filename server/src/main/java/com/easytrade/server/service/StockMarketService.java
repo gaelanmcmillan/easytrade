@@ -5,12 +5,11 @@ import com.easytrade.server.exception.InsufficientFundsException;
 import com.easytrade.server.exception.InvalidQuantityException;
 import com.easytrade.server.exception.NonexistentUserException;
 import com.easytrade.server.exception.UnknownTickerSymbolException;
-import com.easytrade.server.model.Stock;
-import com.easytrade.server.model.StockData;
-import com.easytrade.server.model.User;
+import com.easytrade.server.model.*;
 import com.easytrade.server.repository.StockDataRepository;
 import com.easytrade.server.repository.StockRepository;
 import com.easytrade.server.repository.UserRepository;
+import com.easytrade.server.repository.UserStockHoldingRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StockMarketService {
     private final UserRepository userRepository;
+    private final UserStockHoldingRepository userStockHoldingRepository;
     private final StockRepository stockRepository;
     private final StockDataRepository stockDataRepository;
     private final StockDataService stockDataService;
@@ -63,8 +63,23 @@ public class StockMarketService {
         String tickerSymbol = request.getSymbol();
         BigDecimal price = stockDataService.getLatestPrice(tickerSymbol);
 
+        BigDecimal costOfPurchase = price.multiply(BigDecimal.valueOf(quantity));
+
         // Error case: Insufficient funds (throws InsufficientFundsError)
-        user.makePurchase(price.multiply(BigDecimal.valueOf(quantity)));
+        user.makePurchase(costOfPurchase);
+
+        // TODO: Could save a transaction here
+
+        // Update user's holding in the stock
+        UserStockHolding userStockHolding = userStockHoldingRepository.getUserStockHoldingBySymbol(username, tickerSymbol)
+                .orElse(UserStockHolding.builder()
+                        .user(user)
+                        .stock(stockRepository.getStockBySymbol(tickerSymbol).get()) // It's verified that the stock exists
+                        .quantity(0)
+                        .build());
+
+        userStockHolding.setQuantity(userStockHolding.getQuantity() + quantity);
+        userStockHoldingRepository.save(userStockHolding);
 
         return BuyStockResponse.builder().message("Success").build();
     }

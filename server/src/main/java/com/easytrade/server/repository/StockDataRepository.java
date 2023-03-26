@@ -1,6 +1,7 @@
 package com.easytrade.server.repository;
 
 import com.easytrade.server.model.StockData;
+import com.easytrade.server.model.StockDataId;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface StockDataRepository extends CrudRepository<StockData, Integer> {
+public interface StockDataRepository extends CrudRepository<StockData, StockDataId> {
     @Query("SELECT p FROM StockData p WHERE p.stock.symbol = :symbol AND p.date = :date")
     Optional<StockData> getPriceBySymbolAndDate(String symbol, LocalDate date);
 

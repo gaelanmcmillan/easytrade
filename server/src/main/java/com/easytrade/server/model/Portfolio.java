@@ -15,7 +15,7 @@ public class Portfolio {
     @GeneratedValue
     private Integer id;
 
-    //TODO: Do we want to allow fractional shares of stocks? (Changing Map's value type to double or something...)
+    // TODO: Do we want to allow fractional shares of stocks? (Changing Map's value type to double or something...)
 
     // TODO: Many to one could be appropriate if we want multiple portfolios per user.
     @OneToOne
