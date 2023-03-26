@@ -1,0 +1,6 @@
+Response { type: "cors", url: "http://localhost:8080/api/v1/demo", redirected: false, status: 200, ok: true, statusText: "", headers: Headers(5), body: ReadableStream, bodyUsed: false }
+Dashboard.js:31
+undefined Dashboard.js:21
+Response { type: "cors", url: "http://localhost:8080/api/v1/demo", redirected: false, status: 403, ok: false, statusText: "", headers: Headers(4), body: ReadableStream, bodyUsed: false }
+Dashboard.js:31
+undefined Dashboard.js:21

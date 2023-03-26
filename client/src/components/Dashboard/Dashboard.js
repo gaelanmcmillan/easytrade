@@ -18,25 +18,40 @@ function request (data) {
  */
 const demo = async (demoData, responseHandler) => {
   const endpoint = apiPrefix + "/demo";
-  console.log(endpoint);
   fetch(endpoint, request(demoData))
-    .then(res => console.log(res))
-    .then(data => console.log(data));
+    .then(res => responseHandler(res))
+    .then(data => console.log(data.text()));
 }
 
 class Dashboard extends React.Component {
+    state = {
+        stocks: ''
+    }
+    setStocks = (someState) => {
+        console.log(someState);
+        this.setState(_ => ({
+            stocks: someState
+        }));
+    };
+
+    getToken = () => {
+        const tokenString = sessionStorage.getItem('token');
+        const userToken = JSON.parse(tokenString);
+        return userToken;
+    }
     constructor ( getToken ) {
         super(getToken);
         this.getToken = getToken.getToken;
         const demoData = {
             token: this.getToken(),
         };
-        demo(demoData, data => console.log(data));
+        demo(demoData, data => this.setStocks(data));
     }
     render () {
         return (
             <div className='dashboard'>
                 <p>####Dashbard####</p>
+                <p> {this.state.stocks} </p>
             </div>
         );
     }
