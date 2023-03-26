@@ -35,6 +35,7 @@ public class StockData {
     private BigDecimal open;
     private BigDecimal close;
     private BigDecimal price;
+    private Long volume;
 
 
 //    private BigDecimal earningsPerShare;

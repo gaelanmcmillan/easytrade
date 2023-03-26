@@ -96,7 +96,6 @@ public class StockMarketController {
         }
     }
 
-
     @GetMapping("/all")
     @Transactional(readOnly = true)
     public ResponseEntity<?> getAllStocks() {
