@@ -1,13 +1,11 @@
 package com.easytrade.server.service;
 
-import com.easytrade.server.dto.BuyStockRequest;
-import com.easytrade.server.dto.BuyStockResponse;
-import com.easytrade.server.dto.GetStockRequest;
-import com.easytrade.server.dto.GetStockResponse;
+import com.easytrade.server.dto.*;
 import com.easytrade.server.exception.InsufficientFundsException;
 import com.easytrade.server.exception.InvalidQuantityException;
 import com.easytrade.server.exception.NonexistentUserException;
 import com.easytrade.server.exception.UnknownTickerSymbolException;
+import com.easytrade.server.model.Stock;
 import com.easytrade.server.model.StockData;
 import com.easytrade.server.model.User;
 import com.easytrade.server.repository.StockDataRepository;
@@ -20,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -70,8 +69,10 @@ public class StockMarketService {
         return BuyStockResponse.builder().message("Success").build();
     }
 
-//    public StockListResponse getAllStocks(GetAllStocksRequest request) {
-//    }
+    public AllStocksResponse getAllStocks() {
+        List<Stock> stocks = (List<Stock>) stockRepository.findAll();
+        return AllStocksResponse.builder().stocks(stocks).build();
+    }
 
 
     public GetStockResponse getStock(GetStockRequest request) throws UnknownTickerSymbolException {

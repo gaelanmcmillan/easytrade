@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Date;
 
 @Data
@@ -19,8 +21,7 @@ public class Stock {
     @Id
     @Column(name="symbol")
     private String symbol;
-
     private String company;
-
-    private Date timeOfLastUpdate;
+    private BigDecimal currentOpen;
+    private BigDecimal changeInPercent;
 }
