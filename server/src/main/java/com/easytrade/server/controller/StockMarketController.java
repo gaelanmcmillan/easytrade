@@ -2,6 +2,7 @@ package com.easytrade.server.controller;
 
 import com.easytrade.server.dto.BuyStockRequest;
 import com.easytrade.server.dto.BuyStockResponse;
+import com.easytrade.server.dto.GetStockRequest;
 import com.easytrade.server.exception.InsufficientFundsException;
 import com.easytrade.server.exception.InvalidQuantityException;
 import com.easytrade.server.exception.NonexistentUserException;
@@ -84,6 +85,18 @@ public class StockMarketController {
 //    public ResponseEntity<?> sellStock(@RequestBody SellStockRequest) {
 //
 //    }
+
+    @GetMapping
+    @Transactional
+    public ResponseEntity<?> getStock(@RequestBody GetStockRequest request) {
+        try {
+            return ResponseEntity.ok(stockMarketService.getStock(request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 
 
     // get info {id}
