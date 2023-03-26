@@ -13,12 +13,10 @@ import yahoofinance.YahooFinance;
 import yahoofinance.quotes.stock.StockQuote;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -74,6 +72,8 @@ public class DailyStockDataRetriever {
                             stock.setChangeInPercent(stockQuote.getChangeInPercent());
                             stockRepository.save(stock);
 
+                            updateClosePriceFromYesterday(symbol, stockQuote.getPreviousClose());
+
                             return StockData.builder()
                                     .stock(stock)
                                     .ask(stockQuote.getAsk())
@@ -98,5 +98,13 @@ public class DailyStockDataRetriever {
         dataFromToday.forEach(data -> System.out.println(data.toString()));
 
         return Arrays.stream(symbols).allMatch(symbolsAccountedFor::contains);
+    }
+
+
+    private void updateClosePriceFromYesterday(String tickerSymbol, BigDecimal close) {
+        Date yesterday = Date.valueOf(LocalDate.from(LocalDate.now().atStartOfDay().minusDays(1)));
+        Optional<StockData> dataFromYesterday = stockDataRepository.getPriceBySymbolAndDate(tickerSymbol, yesterday);
+        dataFromYesterday.ifPresent(stockData -> stockData.setClose(close));
+        stockDataRepository.save(dataFromYesterday.get());
     }
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface StockDataRepository extends CrudRepository<StockData, StockDataId> {
     @Query("SELECT p FROM StockData p WHERE p.stock.symbol = :symbol AND p.date = :date")
-    Optional<StockData> getPriceBySymbolAndDate(String symbol, LocalDate date);
+    Optional<StockData> getPriceBySymbolAndDate(String symbol, Date date);
 
     @Query("SELECT p FROM StockData p WHERE (p.date >= :start AND p.date <= :end)")
     List<StockData> getAllSymbolsBetweenDates(Date start, Date end);

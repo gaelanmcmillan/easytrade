@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -124,7 +125,7 @@ public class StockMarketService {
 
     public GetStockResponse getStock(GetStockRequest request) throws UnknownTickerSymbolException {
         String symbol = request.getSymbol();
-        StockData stockData = stockDataRepository.getPriceBySymbolAndDate(symbol, LocalDate.now())
+        StockData stockData = stockDataRepository.getPriceBySymbolAndDate(symbol, Date.valueOf(LocalDate.from(LocalDate.now().atStartOfDay())))
                 .orElseThrow(() -> new UnknownTickerSymbolException(symbol));
 
         return GetStockResponse.builder().symbol(symbol).build();
