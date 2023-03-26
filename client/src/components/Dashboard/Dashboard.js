@@ -3,16 +3,11 @@ import './Dashboard.css';
 const hostname = "http://localhost:8080"
 const apiPrefix = hostname + "/api/v1"
 function request (data) {
-  console.log(data.token+"TOKEN");
   return {
+    credentials: "omit",
     method: "GET",
     mode: "cors",
-    headers: { "Authorization":
-                    "Bearer "+data.token,
-                "Access-Control-Allow-Origin":
-                    "http://localhost:8080",
-                "Accept":
-                    "application/json" }
+    headers: { "Authorization":"Bearer " + data.token},
   }
 }
 /**
@@ -25,8 +20,8 @@ const demo = async (demoData, responseHandler) => {
   const endpoint = apiPrefix + "/demo";
   console.log(endpoint);
   fetch(endpoint, request(demoData))
-    .then(res => res.json())
-    .then(data => responseHandler(data));
+    .then(res => console.log(res))
+    .then(data => console.log(data));
 }
 
 class Dashboard extends React.Component {
