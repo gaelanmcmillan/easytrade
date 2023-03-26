@@ -13,7 +13,6 @@ import yahoofinance.YahooFinance;
 import yahoofinance.quotes.stock.StockQuote;
 
 import java.io.IOException;
-import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class StockDataRetriever {
+public class DailyStockDataRetriever {
     private final StockDataRepository stockDataRepository;
     private final StockRepository stockRepository;
     private final EasyTradeProperties easyTradeProperties;
@@ -35,7 +34,7 @@ public class StockDataRetriever {
      * */
     @Transactional
     @Scheduled(fixedRate=864_000_000) // 24 hours (in millis)
-    public void retrieveStockData() {
+    public void retrieveDailyStockData() {
 
         // Since this task is attempted at our server's startup,
         // we must check that we're not duplicating the work of retrieving
