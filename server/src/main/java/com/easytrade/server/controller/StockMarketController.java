@@ -3,6 +3,7 @@ package com.easytrade.server.controller;
 import com.easytrade.server.dto.BuyStockRequest;
 import com.easytrade.server.dto.BuyStockResponse;
 import com.easytrade.server.dto.GetStockRequest;
+import com.easytrade.server.dto.SellStockRequest;
 import com.easytrade.server.exception.InsufficientFundsException;
 import com.easytrade.server.exception.InvalidQuantityException;
 import com.easytrade.server.exception.NonexistentUserException;
@@ -33,9 +34,8 @@ public class StockMarketController {
      * Preconditions
      * -------------
      *  (1) User exists
-     *  (2) Token is not expired
-     *  (3) Stock exists
-     *  (4) User has sufficient funds for purchase
+     *  (2) Stock exists
+     *  (3) User has sufficient funds for purchase
      *
      * Post-conditions
      * ---------------
@@ -66,9 +66,8 @@ public class StockMarketController {
      * Preconditions
      * -------------
      *  (1) User exists
-     *  (2) Token is not expired
-     *  (3) Stock exists
-     *  (4) User has sufficient stocks to sell
+     *  (2) Stock exists
+     *  (3) User has sufficient stocks to sell
      *
      * Post-conditions
      * ---------------
@@ -80,11 +79,19 @@ public class StockMarketController {
      * Failure
      *  (1) HTTP BAD REQUEST (400) is delivered to client
      *  */
-//    @PatchMapping
-//    @Transactional
-//    public ResponseEntity<?> sellStock(@RequestBody SellStockRequest) {
-//
-//    }
+    @PatchMapping("/sell")
+    @Transactional
+    public ResponseEntity<?> sellStock(
+            @RequestHeader (HttpHeaders.AUTHORIZATION) String bearerToken,
+            @RequestBody SellStockRequest request) {
+        try {
+            stockMarketService.sellStock(bearerToken, request);
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        return ResponseEntity.noContent().build();
+    }
 
     @GetMapping
     @Transactional
