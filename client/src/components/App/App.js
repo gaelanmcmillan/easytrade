@@ -4,6 +4,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
 import Dashboard from '../Dashboard/Dashboard';
+import Questions from '../Questions/Questions';
+import Logout from '../Logout/Logout';
+import Home from '../Home/Home';
 
 
 class App extends React.Component {
@@ -33,12 +36,12 @@ class App extends React.Component {
                   <a href="/signup">Signup</a>
                   <a href="/faq">FAQ</a>
                 </div>
-              <h1>EasyTrade</h1>
               <BrowserRouter>
                 <Routes>
+                  <Route path='/' element={<Home />}/>
                   <Route path='/login' element={<Login setToken={this.setToken}/>}/ >
                   <Route path='/signup' element={<Signup setToken={this.setToken}/>}/ >
-                  <Route path='/faq' element={<p hello/>}/ >
+                  <Route path='/faq' element={<Questions/>}/ >
                 </Routes>
               </BrowserRouter>
               </div>
@@ -49,13 +52,15 @@ class App extends React.Component {
            <div class="topnav">
               <a class="active" href="/">Home</a>
               <a href="/dashboard">Dashboard</a>
+              <a href="/logout">logout</a>
               <a href="/faq">FAQ</a>
           </div>
-          <h1>EasyTrade</h1>
           <BrowserRouter>
             <Routes>
-              <Route path='' element={<h2 A Route/>}/ >
+              <Route path='/' element={<Home />}/>
               <Route path='/dashboard' element={<Dashboard getToken={this.getToken}/>}/ >
+              <Route path='/logout' element={<Logout setToken={this.setToken}/>}/ >
+              <Route path='/faq' element={<Questions/>}/ >
             </Routes>
           </BrowserRouter>
         </div>

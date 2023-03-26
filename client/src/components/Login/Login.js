@@ -1,5 +1,5 @@
 import React from 'react';
-import './Login.css';
+import '../../index.css';
 import API from '../lib/API'
 
 class Login extends React.Component {
@@ -20,18 +20,18 @@ class Login extends React.Component {
 
     render () {
     return (
-        <div className='homeform'>
-        <p>####Login####</p>
-            <form onSubmit={this.handleLogin}>
+        <div className='container'>
+            <form onSubmit={this.handleLogin} class="card width-50 center">
+              <h1 class="center-text">Log in</h1>
                 <div>
+                    <label for="username">Username</label>
                     <input name="username" placeholder="username" />
                 </div>
                 <div>
+                    <label for="password">Password</label>
                     <input type="password" name="password" placeholder="" />
                 </div>
-                <div>
-                    <button type="submit">Log In</button>
-                </div>
+              <button class="button" type="submit">Log in</button>
             </form>
         </div>
     );

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import API from '../lib/API'
 
-import './Signup.css';
+import '../../index.css';
 
 class Signup extends React.Component {
     constructor ( setToken ) {
@@ -26,9 +26,9 @@ class Signup extends React.Component {
     }
     render(){
         return (
-            <div className='homeform'>
-                <p>####Signup####</p>
-                <form onSubmit={this.handleSignup}>
+            <div className='container'>
+                <form onSubmit={this.handleSignup} class="card width-50 center">
+                  <h1 class="center-text">Sign Up</h1>
                 <div>
                     <label for="firstname">First Name</label>
                     <input name="firstname" placeholder="John" />
@@ -46,7 +46,7 @@ class Signup extends React.Component {
                     <input type="password" name="password" placeholder="" />
                 </div>
                 <div>
-                    <button type="submit">Sign Up</button>
+                  <button class="button" type="submit">Sign up</button>
                 </div>
                 </form>
             </div>
