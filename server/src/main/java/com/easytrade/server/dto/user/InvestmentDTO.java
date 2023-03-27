@@ -1,4 +1,4 @@
-package com.easytrade.server.dto;
+package com.easytrade.server.dto.user;
 
 import com.easytrade.server.model.Stock;
 import lombok.AllArgsConstructor;

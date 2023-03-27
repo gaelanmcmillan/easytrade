@@ -1,8 +1,7 @@
 package com.easytrade.server.service;
 
-import com.easytrade.server.dto.InvestmentDTO;
-import com.easytrade.server.dto.PortfolioRequest;
-import com.easytrade.server.dto.PortfolioResponse;
+import com.easytrade.server.dto.user.InvestmentDTO;
+import com.easytrade.server.dto.user.PortfolioResponse;
 import com.easytrade.server.exception.NonexistentUserException;
 import com.easytrade.server.model.UserStockHolding;
 import com.easytrade.server.repository.UserRepository;

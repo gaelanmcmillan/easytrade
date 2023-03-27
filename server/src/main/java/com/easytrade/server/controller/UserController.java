@@ -1,6 +1,5 @@
 package com.easytrade.server.controller;
 
-import com.easytrade.server.dto.PortfolioRequest;
 import com.easytrade.server.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

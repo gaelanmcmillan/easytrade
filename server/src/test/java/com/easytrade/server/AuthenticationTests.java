@@ -1,5 +1,6 @@
 package com.easytrade.server;
 
+import lombok.RequiredArgsConstructor;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +21,13 @@ public class AuthenticationTests {
 
     @Test
     public void signupShouldReturnHttpOk() throws Exception {
-        String signupBodyJson = """
-                {
-                    "firstName":"John",
-                    "lastName":"Smith",
-                    "username":"johnsmith",
-                    "password":"1234"
-                }
-                """;
+        String signupBodyJson = TestConfig.dummyUserSignupJson;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/signup")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(signupBodyJson))
+        var signupRequest = MockMvcRequestBuilders.post("/api/v1/auth/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(signupBodyJson);
+
+        mockMvc.perform(signupRequest)
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -55,14 +51,18 @@ public class AuthenticationTests {
                 }
                 """;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(firstSignupBodyJson))
+        var initialRequest = MockMvcRequestBuilders.post("/api/v1/auth/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(firstSignupBodyJson);
+
+        var duplicateRequest = MockMvcRequestBuilders.post("/api/v1/auth/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(duplicateSignupBodyJson);
+
+        mockMvc.perform(initialRequest)
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(duplicateSignupBodyJson))
+        mockMvc.perform(duplicateRequest)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -83,14 +83,18 @@ public class AuthenticationTests {
                 }
                 """;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/signup")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(signupBodyJson))
+        var signupRequest = MockMvcRequestBuilders.post("/api/v1/auth/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(signupBodyJson);
+
+        var loginRequest = MockMvcRequestBuilders.post("/api/v1/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(loginBodyJson);
+
+        mockMvc.perform(signupRequest)
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/login")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(loginBodyJson))
+        mockMvc.perform(loginRequest)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("william_tell"))

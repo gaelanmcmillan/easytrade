@@ -25,9 +25,6 @@ public class AuthenticationService {
     private final JsonWebTokenService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    /**
-     * NOTE: This method could fail if the user already exists in the database.
-     * */
     @Transactional
     public AuthenticationResponse signup(SignupRequest request) throws AccountWithUsernameExistsException {
         var user = User.builder()
@@ -63,7 +60,6 @@ public class AuthenticationService {
                         request.getUsername(),
                         request.getPassword()));
 
-        // TODO: Handle user doesn't exist
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         var tokenLiteral = jwtService.generateToken(user);
 

@@ -13,4 +13,20 @@ import org.springframework.context.annotation.PropertySource;
 @Profile("test")
 @PropertySource("classpath:application-test.yml")
 public class TestConfig {
+    public static String dummyUsername = "johnsmith";
+    public static String dummyUserSignupJson = """
+                {
+                    "firstName":"John",
+                    "lastName":"Smith",
+                    "username":"johnsmith",
+                    "password":"1234"
+                }
+                """;
+
+    public static String dummyUserLoginJson = """
+                {
+                    "username":"johnsmith",
+                    "password":"1234"
+                }
+                """;
 }

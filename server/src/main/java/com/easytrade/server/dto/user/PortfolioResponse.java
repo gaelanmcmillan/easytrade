@@ -1,11 +1,8 @@
-package com.easytrade.server.dto;
+package com.easytrade.server.dto.user;
 
-import com.easytrade.server.model.Stock;
 import lombok.*;
-import org.springframework.data.util.Pair;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Builder
