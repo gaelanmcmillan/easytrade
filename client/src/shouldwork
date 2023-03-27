@@ -1,0 +1,7 @@
+curl -v --location --request PATCH 'http://localhost:8080/api/v1/stock/buy' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhIiwiaWF0IjoxNjc5ODY4ODQ2LCJleHAiOjE2Nzk4Njk3NDZ9.PcdkSQfeTRPPIPG9NricB_r3EO5fDTHXLiekozr4j1o' \
+--header 'Content-Type: application/json' \
+--data '{
+    "symbol":"AAPL",
+    "quantity":20
+}'
