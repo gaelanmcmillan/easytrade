@@ -1,5 +1,8 @@
 import React from 'react'
 import './Dashboard.css';
+import Buy from './Buy';
+import Sell from './Sell';
+import Portfolio from './Portfolio';
 const hostname = "http://localhost:8080"
 const apiPrefix = hostname + "/api/v1"
 function request (data) {
@@ -64,7 +67,12 @@ class Dashboard extends React.Component {
 
     render () {
         return (
-            <div id='dashboard' class='stockContainer'>
+            <div class='containerDashboard'>
+                <div id='dashboard' class='stockContainer'>
+                </div>
+                <Buy getToken={this.getToken}/>
+                <Sell getToken={this.getToken}/>
+                <Portfolio getToken={this.getToken}/>
             </div>
         );
     }

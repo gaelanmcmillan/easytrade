@@ -29,7 +29,7 @@ class App extends React.Component {
     render() {
       if (!this.getToken()) {
           return (
-              <div className="wrapper">
+              <div className="mainwrapper">
                <div class="topnav">
                   <a class="active" href="/">Home</a>
                   <a href="/login">Login</a>
@@ -38,10 +38,10 @@ class App extends React.Component {
                 </div>
               <BrowserRouter>
                 <Routes>
-                  <Route path='/' element={<Home />}/>
                   <Route path='/login' element={<Login setToken={this.setToken}/>}/ >
                   <Route path='/signup' element={<Signup setToken={this.setToken}/>}/ >
                   <Route path='/faq' element={<Questions/>}/ >
+                  <Route path='*' element={<Home />}/>
                 </Routes>
               </BrowserRouter>
               </div>
@@ -57,10 +57,10 @@ class App extends React.Component {
           </div>
           <BrowserRouter>
             <Routes>
-              <Route path='/' element={<Home />}/>
               <Route path='/dashboard' element={<Dashboard getToken={this.getToken}/>}/ >
               <Route path='/logout' element={<Logout setToken={this.setToken}/>}/ >
               <Route path='/faq' element={<Questions/>}/ >
+              <Route path='*' element={<Home />}/>
             </Routes>
           </BrowserRouter>
         </div>
