@@ -3,6 +3,7 @@ import './Dashboard.css';
 import Buy from './Buy';
 import Sell from './Sell';
 import Portfolio from './Portfolio';
+import StockList from './StockList';
 const hostname = "http://localhost:8080"
 const apiPrefix = hostname + "/api/v1"
 function request (data) {
@@ -14,49 +15,30 @@ function request (data) {
   }
 }
 
-const allStock = async (demoData) => {
-    const endpoint = apiPrefix + "/stock/all";
-    fetch(endpoint, request(demoData))
-        .then(res => {return res.json()})
-        .then(data => {
-            console.log(data);
-            data.stocks.forEach(stock => {
-              let markup = `<div class="stock-widget">
-                <div class="symbol">${stock.symbol}</div>
-                <div class="details">
-                  <div class="price">$${stock.currentOpen}</div>`
-                if(stock.changeInPercent < 0){
-                  markup += `<div class="change-minus">${stock.changeInPercent}%</div>
-                </div>`
-                }else{
-                  markup += `<div class="change-plus">${stock.changeInPercent}%</div>
-                </div>`
-                }
-
-                document.getElementById('dashboard').insertAdjacentHTML('beforeend',markup);
-            });
-        }
-        ).catch((error) =>{
-                let markup = `<h1>FETCH ERROR ${error}</h1>`
-                document.getElementById('dashboard').insertAdjacentHTML('beforeend',markup)});
-};
 
 class Dashboard extends React.Component {
-    state = {
-        stocks: ''
-    }
     constructor ( getToken ) {
         super(getToken);
+        this.state = {
+            isLoading: true,
+            stocks: [],
+        };
         this.getToken = getToken.getToken;
-        const allStockData = {
-            token: this.getToken(),
-        }
-        allStock(allStockData);
     }
-    setStocks = (someState) => {
-        this.setState(_ => ({
-            stocks: someState
-        }));
+    componentDidMount() {
+        const demoData = {
+            token: this.getToken()
+        }
+        const endpoint = apiPrefix + "/stock/all";
+        fetch(endpoint, request(demoData))
+            .then(res => {return res.json()})
+            .then(data => {
+                console.log(data);
+                this.setState({ isLoading: false, stocks: data.stocks });
+            })
+            .catch((error) =>{
+                let markup = `<h1>FETCH ERROR ${error}</h1>`
+                document.getElementById('dashboard').insertAdjacentHTML('beforeend',markup)});
     };
 
     getToken = () => {
@@ -64,11 +46,19 @@ class Dashboard extends React.Component {
         const userToken = JSON.parse(tokenString);
         return userToken;
     }
-
     render () {
+        const { isLoading, stocks } = this.state;
+        if (isLoading) {
+          return <div>Loading...</div>;
+        }
+
         return (
             <div class='containerDashboard'>
                 <div id='dashboard' class='stockContainer'>
+                <div>
+                <h1>Stocks Dashboard</h1>
+                <StockList stocks={stocks} />
+                </div>
                 </div>
                 <Buy getToken={this.getToken}/>
                 <Sell getToken={this.getToken}/>
