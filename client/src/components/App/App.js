@@ -5,6 +5,7 @@ import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
 import Dashboard from '../Dashboard/Dashboard';
 import Questions from '../Questions/Questions';
+import AllChart from '../AllChart/AllChart';
 import Logout from '../Logout/Logout';
 import Home from '../Home/Home';
 
@@ -52,12 +53,14 @@ class App extends React.Component {
            <div class="topnav">
               <a class="active" href="/">Home</a>
               <a href="/dashboard">Dashboard</a>
-              <a href="/logout">logout</a>
+              <a href="/logout">Logout</a>
+              <a href="/charts">Charts</a>
               <a href="/faq">FAQ</a>
           </div>
           <BrowserRouter>
             <Routes>
               <Route path='/dashboard' element={<Dashboard getToken={this.getToken}/>}/ >
+              <Route path='/charts' element={<AllChart getToken={this.getToken}/>}/>
               <Route path='/logout' element={<Logout setToken={this.setToken}/>}/ >
               <Route path='/faq' element={<Questions/>}/ >
               <Route path='*' element={<Home />}/>
