@@ -8,11 +8,20 @@ import com.easytrade.server.repository.StockRepository;
 import com.easytrade.server.repository.UserRepository;
 import com.easytrade.server.repository.UserStockHoldingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
+import yahoofinance.YahooFinance;
+import yahoofinance.histquotes.Interval;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -129,4 +138,89 @@ public class StockMarketService {
     }
 
 
+    /**
+     * Success cases:
+     * --------------
+     * (1) Full: Database contains stock data for all days in [from, to].
+     * (2) Left-partial: Database contains stock data for [d0, to] for from < d0 <= to
+     * (3) Right-partial: Database contains stock data for [from, d1] for from >= d1 > to
+     * (4) Patchy: Database contains stock data for 1 or more sub-intervals inside (from, to).
+     * (5) None: Database contains no data from [from, to].
+     *
+     * Error cases:
+     * ------------
+     * (1) Invalid dates
+     * */
+    public StockDataListResponse getDailyStockDataBetweenDates(String symbol, LocalDate fromLocal, LocalDate toLocal)
+            throws InvalidDateException, IOException, UnknownTickerSymbolException {
+        // We add one to `to` to ensure we enclose an inclusive date range.
+        toLocal = toLocal.plusDays(1);
+
+
+        // Handle error case: Stock doesn't exist
+        Stock stock = stockRepository.getStockBySymbol(symbol).orElseThrow(() -> new UnknownTickerSymbolException(symbol));
+        // Handle error case: Invalid dates
+        Date today = Date.valueOf(LocalDate.now());
+        Date from = Date.valueOf(fromLocal);
+        Date to = Date.valueOf(toLocal);
+
+        if (to.before(from) || today.before(from)) {
+            throw new InvalidDateException(from);
+        }
+        if (today.before(to)) {
+            throw new InvalidDateException(to);
+        }
+
+        // We add one because this is an inclusive interval
+        long intervalWidthInDays = ChronoUnit.DAYS.between(fromLocal, toLocal);
+
+        System.out.printf("INTERVAL WIDTH IN DAYS: '%d'\n", intervalWidthInDays);
+
+        Calendar calendarFrom = Calendar.getInstance();
+        Calendar calendarTo = Calendar.getInstance();
+
+        calendarFrom.set(fromLocal.getYear(), fromLocal.getMonthValue()-1, fromLocal.getDayOfMonth());
+        calendarTo.set(toLocal.getYear(), toLocal.getMonthValue()-1, toLocal.getDayOfMonth());
+
+        // Handle (1) Full
+        {
+            List<StockData> stockDataList = stockDataRepository.getPricesBySymbolBetweenDates(symbol, from, to);
+            System.out.printf("FOUND %d ENTRIES", stockDataList.size());
+            System.out.println(stockDataList);
+            if (stockDataList.size() == intervalWidthInDays) {
+                System.out.println("Nice, we have these dates.");
+                return StockDataListResponse.builder().stockData(stockDataList).build();
+            }
+        }
+        // Handle (2) Left-partial
+        // Handle (3) Right-partial
+
+        // Handle (4) Patchy and (5) None
+        // Solution: Make a request to YahooFinance for [from, to]
+        {
+            yahoofinance.Stock yahooStockData = YahooFinance.get(symbol, calendarFrom, calendarTo, Interval.DAILY);
+            List<StockData> stockDataList = yahooStockData.getHistory().stream().map(historicalQuote -> {
+                LocalDate asLocalDate = LocalDate.ofInstant(historicalQuote.getDate().toInstant(), ZoneId.systemDefault());
+                Date date = Date.valueOf(LocalDate.from(asLocalDate.atStartOfDay()));
+                // TODO: Abstract this to StockData.fromHistoricalQuote
+                return StockData.builder()
+                        .stock(stock)
+                        .date(date)
+                        .open(historicalQuote.getOpen())
+                        .close(historicalQuote.getClose())
+                        .price(historicalQuote.getAdjClose())
+                        .adjClose(historicalQuote.getAdjClose())
+                        .high(historicalQuote.getHigh())
+                        .low(historicalQuote.getLow())
+                        .volume(historicalQuote.getVolume())
+                        .build();
+            }).toList();
+
+            stockDataRepository.saveAll(stockDataList);
+
+            return StockDataListResponse.builder()
+                    .stockData(stockDataList)
+                    .build();
+        }
+    }
 }
