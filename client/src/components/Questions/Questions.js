@@ -58,7 +58,7 @@ Shares can be bought and sold on various stock exchanges, and investors can make
           </div>
 
           <div class="faq-item">
-        <h1 id="question">What is a security?</h1>
+        <h1 id="question">What is volume?</h1>
         <p id="answer">
 In the stock market, "volume" refers to the total number of shares or contracts that have been traded within a specific period of time (usually a day).
 High volume indicates a greater number of traders are buying and selling the stock, while low volume indicates a smaller number of traders trading the stock.
