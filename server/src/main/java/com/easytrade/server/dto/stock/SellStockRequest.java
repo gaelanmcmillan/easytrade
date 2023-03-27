@@ -1,4 +1,4 @@
-package com.easytrade.server.dto;
+package com.easytrade.server.dto.stock;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

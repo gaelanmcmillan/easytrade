@@ -76,8 +76,8 @@ public class DailyStockDataRetriever {
 
                             return StockData.builder()
                                     .stock(stock)
-                                    .ask(stockQuote.getAsk())
-                                    .bid(stockQuote.getBid())
+                                    .high(stockQuote.getDayHigh())
+                                    .low(stockQuote.getDayLow())
                                     .open(stockQuote.getOpen())
                                     .price(stockQuote.getPrice())
                                     .date(Date.valueOf(LocalDate.from(LocalDate.now().atStartOfDay())))

@@ -1,27 +1,18 @@
 package com.easytrade.server.controller;
 
-import com.easytrade.server.dto.BuyStockRequest;
-import com.easytrade.server.dto.BuyStockResponse;
-import com.easytrade.server.dto.GetStockRequest;
-import com.easytrade.server.dto.SellStockRequest;
+import com.easytrade.server.dto.stock.BuyStockRequest;
+import com.easytrade.server.dto.stock.SingleStockRequest;
+import com.easytrade.server.dto.stock.SellStockRequest;
 import com.easytrade.server.exception.InsufficientFundsException;
 import com.easytrade.server.exception.InvalidQuantityException;
 import com.easytrade.server.exception.NonexistentUserException;
 import com.easytrade.server.exception.UnknownTickerSymbolException;
-import com.easytrade.server.model.User;
-import com.easytrade.server.repository.UserRepository;
-import com.easytrade.server.service.JsonWebTokenService;
-import com.easytrade.server.service.StockDataService;
 import com.easytrade.server.service.StockMarketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -95,7 +86,7 @@ public class StockMarketController {
 
     @GetMapping
     @Transactional
-    public ResponseEntity<?> getStock(@RequestBody GetStockRequest request) {
+    public ResponseEntity<?> getStock(@RequestBody SingleStockRequest request) {
         try {
             return ResponseEntity.ok(stockMarketService.getStock(request));
         } catch (Exception e) {

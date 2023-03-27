@@ -18,10 +18,8 @@ public class PortfolioService {
     private final UserStockHoldingRepository userStockHoldingRepository;
     private final UserRepository userRepository;
 
-    public PortfolioResponse getUserPortfolio(PortfolioRequest request) throws NonexistentUserException {
+    public PortfolioResponse getUserPortfolio(String username) throws NonexistentUserException {
         // Error case: User doesn't exist
-        String username = request.getUsername();
-
         if (userRepository.findByUsername(username).isEmpty()) {
             throw new NonexistentUserException(username);
         }

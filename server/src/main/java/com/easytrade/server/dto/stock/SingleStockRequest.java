@@ -1,4 +1,4 @@
-package com.easytrade.server.dto;
+package com.easytrade.server.dto.stock;
 
 import lombok.Data;
 
@@ -7,6 +7,6 @@ import lombok.Data;
  * requests to `GET` <api-prefix>/stock
  * */
 @Data
-public class GetStockRequest {
+public class SingleStockRequest {
     private String symbol;
 }

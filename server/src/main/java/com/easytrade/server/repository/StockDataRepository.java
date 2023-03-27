@@ -19,5 +19,5 @@ public interface StockDataRepository extends CrudRepository<StockData, StockData
     List<StockData> getAllSymbolsBetweenDates(Date start, Date end);
 
     @Query("SELECT p FROM StockData p WHERE p.stock.symbol = :symbol AND (p.date >= :start AND p.date <= :end)")
-    List<StockData> getPricesBySymbolBetweenDates(String symbol, LocalDate start, LocalDate end);
+    List<StockData> getPricesBySymbolBetweenDates(String symbol, Date start, Date end);
 }
