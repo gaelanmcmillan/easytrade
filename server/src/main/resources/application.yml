@@ -7,7 +7,7 @@ spring:
     password: easypassword
   jpa:
     hibernate:
-      ddl-auto: update # This is the main difference between prod and test.
+      ddl-auto: create # This is the main difference between prod and test.
     show-sql: true
     properties:
       hibernate:

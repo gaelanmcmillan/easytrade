@@ -72,8 +72,6 @@ public class DailyStockDataRetriever {
                             stock.setChangeInPercent(stockQuote.getChangeInPercent());
                             stockRepository.save(stock);
 
-                            updateClosePriceFromYesterday(symbol, stockQuote.getPreviousClose());
-
                             return StockData.builder()
                                     .stock(stock)
                                     .high(stockQuote.getDayHigh())
@@ -85,7 +83,7 @@ public class DailyStockDataRetriever {
                         }).toList();
 
         // Save all data points from today
-        stockDataRepository.saveAll(dataFromToday);
+//        stockDataRepository.saveAll(dataFromToday);
     }
 
     private boolean isStockDataUpToDate() {
@@ -98,13 +96,5 @@ public class DailyStockDataRetriever {
         dataFromToday.forEach(data -> System.out.println(data.toString()));
 
         return Arrays.stream(symbols).allMatch(symbolsAccountedFor::contains);
-    }
-
-
-    private void updateClosePriceFromYesterday(String tickerSymbol, BigDecimal close) {
-        Date yesterday = Date.valueOf(LocalDate.from(LocalDate.now().atStartOfDay().minusDays(1)));
-        Optional<StockData> dataFromYesterday = stockDataRepository.getPriceBySymbolAndDate(tickerSymbol, yesterday);
-        dataFromYesterday.ifPresent(stockData -> stockData.setClose(close));
-        stockDataRepository.save(dataFromYesterday.get());
     }
 }

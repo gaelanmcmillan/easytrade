@@ -9,10 +9,13 @@ import com.easytrade.server.exception.NonexistentUserException;
 import com.easytrade.server.exception.UnknownTickerSymbolException;
 import com.easytrade.server.service.StockMarketService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @CrossOrigin
 @RestController
@@ -99,5 +102,20 @@ public class StockMarketController {
     public ResponseEntity<?> getAllStocks() {
         return ResponseEntity.ok(stockMarketService.getAllStocks());
     }
-    // get info {id}
+
+
+
+    @GetMapping("/history")
+    @Transactional
+    public ResponseEntity<?> getDailyStockDataBetweenDates(
+            @RequestParam String symbol,
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to) {
+        try {
+            return ResponseEntity.ok(stockMarketService.getDailyStockDataBetweenDates(symbol, from, to));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
