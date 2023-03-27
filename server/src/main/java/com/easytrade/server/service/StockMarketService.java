@@ -153,8 +153,10 @@ public class StockMarketService {
      * */
     public StockDataListResponse getDailyStockDataBetweenDates(String symbol, LocalDate fromLocal, LocalDate toLocal)
             throws InvalidDateException, IOException, UnknownTickerSymbolException {
-        // We subtract one from `from` to ensure we enclose an inclusive date range.
-//        fromLocal = fromLocal.minusDays(1);
+        // We add one to `to` to ensure we enclose an inclusive date range.
+        toLocal = toLocal.plusDays(1);
+
+
         // Handle error case: Stock doesn't exist
         Stock stock = stockRepository.getStockBySymbol(symbol).orElseThrow(() -> new UnknownTickerSymbolException(symbol));
         // Handle error case: Invalid dates
