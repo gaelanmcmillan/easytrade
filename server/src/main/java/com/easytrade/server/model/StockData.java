@@ -29,10 +29,11 @@ public class StockData {
     @Id
     @Column(name="date")
     private Date date;
-    private BigDecimal ask;
-    private BigDecimal bid;
+    private BigDecimal low;
+    private BigDecimal high;
     private BigDecimal open;
     private BigDecimal close;
+    private BigDecimal adjClose;
     private BigDecimal price;
     private Long volume;
 

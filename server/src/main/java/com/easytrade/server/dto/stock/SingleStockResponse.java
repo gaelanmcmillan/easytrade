@@ -1,4 +1,4 @@
-package com.easytrade.server.dto;
+package com.easytrade.server.dto.stock;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetStockResponse {
+public class SingleStockResponse {
     String symbol;
     String company;
     Date date;

@@ -1,7 +1,7 @@
 package com.easytrade.server.controller;
 
-import com.easytrade.server.dto.LoginRequest;
-import com.easytrade.server.dto.SignupRequest;
+import com.easytrade.server.dto.auth.LoginRequest;
+import com.easytrade.server.dto.auth.SignupRequest;
 import com.easytrade.server.exception.AccountWithUsernameExistsException;
 import com.easytrade.server.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;

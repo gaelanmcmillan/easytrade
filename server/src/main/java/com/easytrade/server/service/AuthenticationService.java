@@ -1,9 +1,9 @@
 package com.easytrade.server.service;
 
 import com.easytrade.server.config.EasyTradeProperties;
-import com.easytrade.server.dto.LoginRequest;
-import com.easytrade.server.dto.SignupRequest;
-import com.easytrade.server.dto.AuthenticationResponse;
+import com.easytrade.server.dto.auth.LoginRequest;
+import com.easytrade.server.dto.auth.SignupRequest;
+import com.easytrade.server.dto.auth.AuthenticationResponse;
 import com.easytrade.server.exception.AccountWithUsernameExistsException;
 import com.easytrade.server.model.Role;
 import com.easytrade.server.model.User;

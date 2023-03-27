@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final PortfolioService portfolioService;
-    @GetMapping("/portfolio")
-    public ResponseEntity<?> getUserPortfolio(@RequestBody PortfolioRequest request) {
+    @GetMapping("/portfolio/{username}")
+    public ResponseEntity<?> getUserPortfolio(@PathVariable String username) {
         try {
-            return ResponseEntity.ok().body(portfolioService.getUserPortfolio(request));
+            return ResponseEntity.ok().body(portfolioService.getUserPortfolio(username));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

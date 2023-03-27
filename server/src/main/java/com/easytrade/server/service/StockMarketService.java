@@ -1,21 +1,19 @@
 package com.easytrade.server.service;
 
-import com.easytrade.server.dto.*;
+import com.easytrade.server.dto.stock.*;
 import com.easytrade.server.exception.*;
 import com.easytrade.server.model.*;
 import com.easytrade.server.repository.StockDataRepository;
 import com.easytrade.server.repository.StockRepository;
 import com.easytrade.server.repository.UserRepository;
 import com.easytrade.server.repository.UserStockHoldingRepository;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -122,12 +120,12 @@ public class StockMarketService {
     }
 
 
-    public GetStockResponse getStock(GetStockRequest request) throws UnknownTickerSymbolException {
+    public SingleStockResponse getStock(SingleStockRequest request) throws UnknownTickerSymbolException {
         String symbol = request.getSymbol();
-        StockData stockData = stockDataRepository.getPriceBySymbolAndDate(symbol, LocalDate.now())
+        StockData stockData = stockDataRepository.getPriceBySymbolAndDate(symbol, Date.valueOf(LocalDate.from(LocalDate.now().atStartOfDay())))
                 .orElseThrow(() -> new UnknownTickerSymbolException(symbol));
 
-        return GetStockResponse.builder().symbol(symbol).build();
+        return SingleStockResponse.builder().symbol(symbol).build();
     }
 
 
