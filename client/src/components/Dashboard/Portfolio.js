@@ -12,7 +12,6 @@ function request () {
   }
 }
 
-
 const extractPayload = (tokenLiteral) => {
   // JWT is of the form `header.payload.signature`
   const base64Payload = tokenLiteral.split('.')[1];
