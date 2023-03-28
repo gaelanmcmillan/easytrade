@@ -32,7 +32,6 @@ public class StockMarketService {
     private final UserStockHoldingRepository userStockHoldingRepository;
     private final StockRepository stockRepository;
     private final StockDataRepository stockDataRepository;
-    private final StockDataService stockDataService;
     private final JsonWebTokenService jwtService;
 
     public BuyStockResponse buyStock(String bearerToken, BuyStockRequest request)
@@ -59,7 +58,7 @@ public class StockMarketService {
 
         // Error case: Ticker symbol doesn't exist
         String tickerSymbol = request.getSymbol();
-        BigDecimal price = stockDataService.getLatestPrice(tickerSymbol);
+        BigDecimal price = getLatestPrice(tickerSymbol);
 
         BigDecimal costOfPurchase = price.multiply(BigDecimal.valueOf(quantity));
 
@@ -101,7 +100,7 @@ public class StockMarketService {
 
         // Error case: Ticker symbol doesn't exist
         String tickerSymbol = request.getSymbol();
-        BigDecimal price = stockDataService.getLatestPrice(tickerSymbol);
+        BigDecimal price = getLatestPrice(tickerSymbol);
 
         // Error case: User doesn't hold enough of the given stock
         Optional<UserStockHolding> maybeHolding = userStockHoldingRepository.getUserStockHoldingBySymbol(username, tickerSymbol);
@@ -222,5 +221,12 @@ public class StockMarketService {
                     .stockData(stockDataList)
                     .build();
         }
+    }
+
+    private BigDecimal getLatestPrice(String tickerSymbol) throws UnknownTickerSymbolException {
+        Stock stock = stockRepository.getStockBySymbol(tickerSymbol).orElseThrow(
+                () -> new UnknownTickerSymbolException(tickerSymbol));
+
+        return stock.getCurrentOpen();
     }
 }
