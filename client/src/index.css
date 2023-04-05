@@ -225,11 +225,15 @@ input:focus {
   width: 100%;
   height: auto;
 }
+
 .stockContainer {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  grid-template-rows: repeat(2,auto);
   width: 100%;
   height: auto;
 }
+
 .mainwrapper {
   bg: #eceff4;
 }
