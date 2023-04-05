@@ -4,6 +4,24 @@ Paper Money Stock Market System
 
 Buy, sell, and view stocks in a low-pressure, paper money environment.
 
+# To run
+1. Clone the repository
+```shell
+git clone https://github.com/gaelanmcmillan/easytrade
+```
+2. Run the backend
+```shell
+cd easytrade/server
+mvn spring-boot:run
+```
+
+3. Run the frontend
+```shell
+cd easytrade/client
+npm install
+npm start
+```
+
 # Server
 The backend server is is a Spring Boot application which follows the M(V)C architecture. *V* is parenthesized because the View is really going to be powered by our external frontend client.
 Authentication is implemented with Spring Security and the [JSON Web Token Protocol](https://jwt.io/).
