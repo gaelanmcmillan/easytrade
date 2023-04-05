@@ -1,5 +1,6 @@
 import React from 'react'
 import Chart from '../Chart/Chart'
+import Coin from "../../assets/coin_small.gif";
 
 //Request function that will get the stocks
 const hostname = "http://localhost:8080"
@@ -51,7 +52,7 @@ class AllChart extends React.Component {
         console.log(stocks[0]);
         //Print loading when loading grabbing data
         if (isLoading) {
-          return <div>Loading...</div>;
+          return <div><img src={Coin}></img></div>;
         }
 
         //Return stocks when the data is recieved

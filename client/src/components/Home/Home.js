@@ -3,7 +3,13 @@ import '../../index.css';
 import Logo from '../../assets/logo.png';
 
 class Home extends React.Component {
+    constructor({isLoggedIn}) {
+      super();
+      this.isLoggedIn = isLoggedIn;
+    }
+
     render () {
+      console.log(this.isLoggedIn);
     return (
                 <div class="container">
                   <div class="">
@@ -18,7 +24,7 @@ class Home extends React.Component {
                       practice trading stocks using real-time market data without any
                       financial risk.
                     </p>
-                    <a href="#" class="button">Get Started</a>
+                    <a href={this.isLoggedIn ? "/dashboard" : "/signup"} class="button">Get Started</a>
                   </div>
                 </div>
     );

@@ -162,6 +162,43 @@ input:focus {
   gap: 50px;
 }
 
+.portfolioContainer {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10%;
+  padding-right: 10%;
+  margin: 20px;
+  padding-top: 10px;
+}
+
+table {
+  width: 1000px;
+  border-collapse: collapse;
+  margin: 20px;
+  font-size: 20pt;
+}
+
+thead {
+  text-align: left;
+}
+th {
+  width: 800px;
+  border-bottom: 4px solid var(--polar1);
+}
+
+tbody tr:nth-child(odd) {
+  background-color: var(--snow1);
+}
+
+tfoot {
+  border-top: 2px solid var(--polar1); 
+  border-bottom: 4px solid var(--polar1);
+}
+
+tfoot td:nth-child(4) {
+  color: var(--aurora4);
+}
+
 .button {
   background-color: var(--polar1);
   color: white;

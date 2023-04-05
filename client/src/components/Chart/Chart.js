@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Coin from "../../assets/coin_small.gif";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -91,7 +91,7 @@ class Chart extends React.Component {
         console.log(stocks);
         //print loading while waiting for data
         if (isLoading) {
-          return <div>Loading...</div>;
+          return <div><img src={Coin} height="200px" alt="A spinning coin, displayed as a loading animation"></img></div>;
         }
         // create the line element when the data is recieved
         return <Line options={options} data={stocks} />;

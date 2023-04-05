@@ -67,7 +67,7 @@ class App extends React.Component {
               <Route path='/charts' element={<AllChart getToken={this.getToken}/>}/>
               <Route path='/logout' element={<Logout setToken={this.setToken}/>}/ >
               <Route path='/faq' element={<Questions/>}/ >
-              <Route path='*' element={<Home />}/>
+              <Route path='*' element={<Home isLoggedIn={!(!this.getToken)} />}/>
             </Routes>
           </BrowserRouter>
         </div>

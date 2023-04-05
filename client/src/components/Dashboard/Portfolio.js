@@ -55,12 +55,18 @@ class Portfolio extends React.Component {
 
     render () {
         const { isLoading, userData } = this.state;
+
         if (isLoading) {
           return <div>Loading...</div>;
         }
+
         return (
-            <div id='portfolioStatus' className='container'>
-            <BoughtList userdata={userData}/>
+            <div id='portfolioStatus' className='portfolioContainer'>
+                <div class="card">
+
+                <h1>{userData.username}'s Portfolio</h1>
+                <BoughtList userdata={userData}/>
+                </div>
             </div>
         );
     }
