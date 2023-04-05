@@ -26,6 +26,7 @@ ChartJS.register(
 const hostname = "http://localhost:8080"
 const apiPrefix = hostname + "/api/v1"
 
+//Create static chart Config
 export const options = {
   responsive: true,
   plugins: {
@@ -34,7 +35,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Line Chart',
+      text: 'Stock price range',
     },
   },
 };
@@ -50,6 +51,7 @@ class Chart extends React.Component {
     componentDidMount() {
         console.log(this.data.data.symbol);
         const endpoint = apiPrefix + "/stock/history?symbol="+this.data.data.symbol+"&from=2023-02-06&to=2023-03-09";
+        //Grab data about stock and crete a data object
         fetch(endpoint, request())
             .then(res => {return res.json()})
             .then(data => {
@@ -61,7 +63,7 @@ class Chart extends React.Component {
                 });
 
                 let chartData = {
-                    labels: [1, 2, 3, 4, 5, 6, 7],
+                    labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
                     datasets: [
                         {
                             label: this.data.data.symbol,
@@ -87,9 +89,11 @@ class Chart extends React.Component {
     render(){
         const { isLoading, stocks } = this.state;
         console.log(stocks);
+        //print loading while waiting for data
         if (isLoading) {
           return <div>Loading...</div>;
         }
+        // create the line element when the data is recieved
         return <Line options={options} data={stocks} />;
     }
 }

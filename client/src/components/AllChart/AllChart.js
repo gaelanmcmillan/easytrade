@@ -1,6 +1,7 @@
 import React from 'react'
 import Chart from '../Chart/Chart'
 
+//Request function that will get the stocks
 const hostname = "http://localhost:8080"
 const apiPrefix = hostname + "/api/v1"
 function request (data) {
@@ -14,6 +15,7 @@ function request (data) {
 
 
 class AllChart extends React.Component {
+    //Grab the token such that there is valid authentication
     constructor ( getToken ) {
         super(getToken);
         this.state = {
@@ -22,6 +24,7 @@ class AllChart extends React.Component {
         };
         this.getToken = getToken.getToken;
     }
+    // On mount grab stocks from endpoint and set loading to false
     componentDidMount() {
         const demoData = {
             token: this.getToken()
@@ -46,10 +49,12 @@ class AllChart extends React.Component {
     render () {
         const { isLoading, stocks } = this.state;
         console.log(stocks[0]);
+        //Print loading when loading grabbing data
         if (isLoading) {
           return <div>Loading...</div>;
         }
 
+        //Return stocks when the data is recieved
         return (
             <div class='containerDashboard'>
                 <div id='dashboard' class='stockContainer'>

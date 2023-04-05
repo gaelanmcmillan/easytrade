@@ -11,9 +11,11 @@ import Home from '../Home/Home';
 
 
 class App extends React.Component {
+    //Store state token that can be used to authenticate user
     state = {
         token: ''
     }
+    // Allow token to be stored in localstorage so the user can refresh page
     setToken = (userToken) => {
         this.setState(_ => ({
             token: userToken
@@ -28,6 +30,7 @@ class App extends React.Component {
     }
 
     render() {
+        // Render non login pages
       if (!this.getToken()) {
           return (
               <div className="mainwrapper">
@@ -48,6 +51,7 @@ class App extends React.Component {
               </div>
           );
       }
+        //render pages when user is logged in
       return (
         <div className="wrapper">
            <div class="topnav">
