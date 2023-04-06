@@ -35,7 +35,7 @@ function BoughtList({ userdata }) {
             <td>--</td>
             <td>--</td>
             <td>{formatPrice(
-              userdata.investments.map(totalPrice).reduce(add)
+              userdata.investments.map(totalPrice).reduce(add, 0)
               )}</td>
           </tr>
         </tfoot>
