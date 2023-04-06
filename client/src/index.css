@@ -191,7 +191,7 @@ tbody tr:nth-child(odd) {
 }
 
 tfoot {
-  border-top: 2px solid var(--polar1); 
+  border-top: 2px solid var(--polar1);
   border-bottom: 4px solid var(--polar1);
 }
 
@@ -265,8 +265,8 @@ tfoot td:nth-child(4) {
 
 .stockContainer {
   display: grid;
-  grid-template-columns: repeat(4,1fr);
-  grid-template-rows: repeat(2,auto);
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, auto);
   width: 100%;
   height: auto;
 }
@@ -279,4 +279,9 @@ tfoot td:nth-child(4) {
   position: absolute;
   right: 0px;
   bottom: 0px;
+}
+
+.piggybank {
+  position: absolute;
+  left: 0px;
 }

@@ -4,6 +4,7 @@ import Buy from './Buy';
 import Sell from './Sell';
 import Portfolio from './Portfolio';
 import StockList from './StockList';
+import Piggybank from "../../assets/piggybank.gif";
 const hostname = "http://localhost:8080"
 const apiPrefix = hostname + "/api/v1"
 function request (data) {
@@ -53,13 +54,14 @@ class Dashboard extends React.Component {
         }
 
         return (
-            <div class='containerDashboard'>
+            <div class='containerDashboard'> 
                 <div id='dashboard' class='stockContainer'>
                 <div>
                 <h1>Stocks Dashboard</h1>
                 <StockList stocks={stocks} />
                 </div>
                 </div>
+                <img src={Piggybank} class="width-25 piggybank" />
                 <Buy getToken={this.getToken}/>
                 <Sell getToken={this.getToken}/>
                 <Portfolio getToken={this.getToken}/>

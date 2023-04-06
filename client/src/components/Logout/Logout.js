@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Scale from "../../assets/scale.gif";
 
 import '../../index.css';
 
@@ -15,6 +16,7 @@ class Logout extends React.Component {
         return (
             <div className='container'>
               <button class="button" onClick={this.logout}>Log Out</button>
+              <img src={Scale} class="" />
             </div>
         );
     }
