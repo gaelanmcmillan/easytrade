@@ -54,6 +54,9 @@ class Buy extends React.Component {
         //signup(userData, data => setToken(extractPayload(data.token)));
         // This line will store the raw token
         buy(buyData, data => console.log(data));
+        
+        // activate the gif
+        this.props.playAnim();
     }
     getToken = () => {
         const tokenString = sessionStorage.getItem('token');

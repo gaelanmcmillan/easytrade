@@ -4,6 +4,8 @@ import Buy from './Buy';
 import Sell from './Sell';
 import Portfolio from './Portfolio';
 import StockList from './StockList';
+import Piggybank from "../../assets/piggybank.gif";
+import PiggybankFrame from "../../assets/piggybank_frame.png";
 const hostname = "http://localhost:8080"
 const apiPrefix = hostname + "/api/v1"
 function request (data) {
@@ -46,6 +48,21 @@ class Dashboard extends React.Component {
         const userToken = JSON.parse(tokenString);
         return userToken;
     }
+
+    showAnim = () => {
+        const target = document.getElementById("piggybank");
+        // set to first frame to reset the gif
+        target.src = PiggybankFrame;
+        // wait a bit while showing first frame
+        setTimeout(() => {
+            target.src = Piggybank;
+        }, 50);
+        // display gif for 900 ms
+        setTimeout(() => {
+            target.src = PiggybankFrame;
+        }, 900);
+    }
+
     render () {
         const { isLoading, stocks } = this.state;
         if (isLoading) {
@@ -53,14 +70,15 @@ class Dashboard extends React.Component {
         }
 
         return (
-            <div class='containerDashboard'>
+            <div class='containerDashboard'> 
                 <div id='dashboard' class='stockContainer'>
                 <div>
                 <h1>Stocks Dashboard</h1>
                 <StockList stocks={stocks} />
                 </div>
                 </div>
-                <Buy getToken={this.getToken}/>
+                <img id="piggybank" src={PiggybankFrame} class="width-25 piggybank" />
+                <Buy getToken={this.getToken} playAnim={this.showAnim}/>
                 <Sell getToken={this.getToken}/>
                 <Portfolio getToken={this.getToken}/>
             </div>
