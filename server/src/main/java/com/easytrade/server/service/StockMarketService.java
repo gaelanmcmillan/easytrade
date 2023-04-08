@@ -6,9 +6,8 @@ import com.easytrade.server.model.*;
 import com.easytrade.server.repository.StockDataRepository;
 import com.easytrade.server.repository.StockRepository;
 import com.easytrade.server.repository.UserRepository;
-import com.easytrade.server.repository.UserStockHoldingRepository;
+import com.easytrade.server.repository.InvestmentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.Interval;
@@ -19,8 +18,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StockMarketService {
     private final UserRepository userRepository;
-    private final UserStockHoldingRepository userStockHoldingRepository;
+    private final InvestmentRepository investmentRepository;
     private final StockRepository stockRepository;
     private final StockDataRepository stockDataRepository;
     private final JsonWebTokenService jwtService;
@@ -68,15 +65,15 @@ public class StockMarketService {
         // TODO: Could save a transaction here
 
         // Update user's holding in the stock
-        UserStockHolding userStockHolding = userStockHoldingRepository.getUserStockHoldingBySymbol(username, tickerSymbol)
-                .orElse(UserStockHolding.builder()
+        Investment investment = investmentRepository.getUserStockHoldingBySymbol(username, tickerSymbol)
+                .orElse(Investment.builder()
                         .user(user)
                         .stock(stockRepository.getStockBySymbol(tickerSymbol).get()) // It's verified that the stock exists
                         .quantity(0)
                         .build());
 
-        userStockHolding.setQuantity(userStockHolding.getQuantity() + quantity);
-        userStockHoldingRepository.save(userStockHolding);
+        investment.setQuantity(investment.getQuantity() + quantity);
+        investmentRepository.save(investment);
 
         return BuyStockResponse.builder().message("Success").build();
     }
@@ -103,13 +100,13 @@ public class StockMarketService {
         BigDecimal price = getLatestPrice(tickerSymbol);
 
         // Error case: User doesn't hold enough of the given stock
-        Optional<UserStockHolding> maybeHolding = userStockHoldingRepository.getUserStockHoldingBySymbol(username, tickerSymbol);
+        Optional<Investment> maybeHolding = investmentRepository.getUserStockHoldingBySymbol(username, tickerSymbol);
 
         if (maybeHolding.isEmpty() || maybeHolding.get().getQuantity() < quantity) {
             throw new InsufficientHoldingsExpception(tickerSymbol);
         }
 
-        UserStockHolding userStockHolding = maybeHolding.get();
+        Investment investment = maybeHolding.get();
 
         BigDecimal earningsFromSale = price.multiply(BigDecimal.valueOf(quantity));
 
@@ -118,8 +115,8 @@ public class StockMarketService {
         // TODO: Could save a transaction here
 
         // Update user's holding in the stock
-        userStockHolding.setQuantity(userStockHolding.getQuantity() - quantity);
-        userStockHoldingRepository.save(userStockHolding);
+        investment.setQuantity(investment.getQuantity() - quantity);
+        investmentRepository.save(investment);
     }
 
     public AllStocksResponse getAllStocks() {

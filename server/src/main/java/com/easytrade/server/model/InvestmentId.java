@@ -6,7 +6,7 @@ import jakarta.persistence.ManyToOne;
 import java.io.Serializable;
 
 
-public class UserStockHoldingId implements Serializable {
+public class InvestmentId implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="user_id")
