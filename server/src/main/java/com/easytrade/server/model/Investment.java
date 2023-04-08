@@ -11,8 +11,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@IdClass(UserStockHoldingId.class)
-public class UserStockHolding {
+@IdClass(InvestmentId.class)
+public class Investment {
     @Id
     @ManyToOne
     @JoinColumn(name="user_id")
