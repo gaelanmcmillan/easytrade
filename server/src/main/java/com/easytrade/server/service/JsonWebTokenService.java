@@ -19,7 +19,6 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 public class JsonWebTokenService {
-    // TODO: Generate this secret key randomly ourselves... Not important right now!
     private static final String SECRET_KEY = "566D5970337336763979244226452948404D635166546A576E5A723474377721";
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

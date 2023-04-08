@@ -62,8 +62,6 @@ public class StockMarketService {
         // Error case: Insufficient funds (throws InsufficientFundsError)
         user.makePurchase(costOfPurchase);
 
-        // TODO: Could save a transaction here
-
         // Update user's holding in the stock
         Investment investment = investmentRepository.getUserStockHoldingBySymbol(username, tickerSymbol)
                 .orElse(Investment.builder()
@@ -111,8 +109,6 @@ public class StockMarketService {
         BigDecimal earningsFromSale = price.multiply(BigDecimal.valueOf(quantity));
 
         user.setAccountBalance(user.getAccountBalance().add(earningsFromSale));
-
-        // TODO: Could save a transaction here
 
         // Update user's holding in the stock
         investment.setQuantity(investment.getQuantity() - quantity);
@@ -188,8 +184,6 @@ public class StockMarketService {
                 return StockDataListResponse.builder().stockData(stockDataList).build();
             }
         }
-        // Handle (2) Left-partial
-        // Handle (3) Right-partial
 
         // Handle (4) Patchy and (5) None
         // Solution: Make a request to YahooFinance for [from, to]
@@ -198,7 +192,6 @@ public class StockMarketService {
             List<StockData> stockDataList = yahooStockData.getHistory().stream().map(historicalQuote -> {
                 LocalDate asLocalDate = LocalDate.ofInstant(historicalQuote.getDate().toInstant(), ZoneId.systemDefault());
                 Date date = Date.valueOf(LocalDate.from(asLocalDate.atStartOfDay()));
-                // TODO: Abstract this to StockData.fromHistoricalQuote
                 return StockData.builder()
                         .stock(stock)
                         .date(date)
